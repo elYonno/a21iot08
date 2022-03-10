@@ -23,7 +23,7 @@
             app:destination="@id/plantDetail" />
     </fragment>
     <fragment
-        android:id="@+id/account"
+        android:id="@+id/accountModel"
         android:name="com.example.superdupercoolplantapp.fragments.Account"
         android:label="fragment_account"
         tools:layout="@layout/fragment_account" />

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +16,12 @@ import android.widget.TextView;
 
 import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.R;
+import com.example.superdupercoolplantapp.models.AccountModel;
+import com.example.superdupercoolplantapp.models.ViewModelMain;
 
 public class Account extends Fragment {
     private MainActivity activity;
+    private ViewModelMain viewModel;
 
     private TextView accountUsername;
     private EditText accountName, accountPassword, accountEmail, accountNumber;
@@ -45,6 +49,9 @@ public class Account extends Fragment {
 
         logout = view.findViewById(R.id.account_logout);
 
+        viewModel = new ViewModelProvider(activity).get(ViewModelMain.class);
+        viewModel.getLoggedInAccount().observe(getViewLifecycleOwner(), this::onAccountChanged);
+
     }
 
     @Override
@@ -52,5 +59,13 @@ public class Account extends Fragment {
         super.onStart();
         activity.setText(getString(R.string.account));
         activity.showBottomNav();
+    }
+
+    private void onAccountChanged(AccountModel accountModel) {
+        accountUsername.setText(accountModel.getUserName());
+        accountName.setText(accountModel.getRealName());
+        accountPassword.setText(accountModel.getPassword());
+        accountEmail.setText(accountModel.getEmailAddress());
+        accountNumber.setText(accountModel.getPhoneNumber());
     }
 }

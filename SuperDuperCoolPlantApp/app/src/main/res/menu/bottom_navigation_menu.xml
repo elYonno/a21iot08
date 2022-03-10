@@ -14,7 +14,7 @@
         android:icon="@drawable/ic_log"
         android:title="@string/log" />
     <item
-        android:id="@+id/account"
+        android:id="@+id/accountModel"
         android:icon="@drawable/ic_account"
         android:title="@string/account" />
 </menu>
