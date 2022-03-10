@@ -1,6 +1,5 @@
-package com.example.superdupercoolplantapp.models;
+package com.example.superdupercoolplantapp.background.viewmodels;
 
-import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -11,20 +10,22 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.superdupercoolplantapp.MainActivity;
+import com.example.superdupercoolplantapp.background.APIs;
+import com.example.superdupercoolplantapp.background.models.AccountModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ViewModelMain extends ViewModel {
-    private static final String logInAPI = "https://studev.groept.be/api/a21iot08/logIn/";
     private static final String TAG = "ViewModelMain";
 
     private final MutableLiveData<AccountModel> loggedInAccount = new MutableLiveData<>();
 
-    public void logIn(Context context, String username, String password) {
-        String logIn = logInAPI + username + "/" + password;
+    public void logIn(MainActivity mainActivity, String username, String password) {
+        String logIn = APIs.LOG_IN + username + "/" + password;
 
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        RequestQueue requestQueue = Volley.newRequestQueue(mainActivity);
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, logIn, null,
             response -> {
                 try {
@@ -36,13 +37,13 @@ public class ViewModelMain extends ViewModel {
                     String email = o.getString("emailAddress");
 
                     updateUser(new AccountModel(userID, username, realName, phoneNumber, email, password));
-
+                    mainActivity.getMainData(userID);
                 } catch (JSONException e) {
-                    Toast.makeText(context, "Incorrect username/password.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mainActivity, "Incorrect username/password.", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }, error -> {
-                Toast.makeText(context, "Server error.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mainActivity, "Server error.", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Unable to connect to server: ", error);
         });
 

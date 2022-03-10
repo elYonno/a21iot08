@@ -1,4 +1,4 @@
-package com.example.superdupercoolplantapp.models;
+package com.example.superdupercoolplantapp.background.models;
 
 public class AccountModel {
     private int userID;

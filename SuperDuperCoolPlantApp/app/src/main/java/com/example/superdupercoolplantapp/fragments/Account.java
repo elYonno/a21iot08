@@ -16,8 +16,8 @@ import android.widget.TextView;
 
 import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.R;
-import com.example.superdupercoolplantapp.models.AccountModel;
-import com.example.superdupercoolplantapp.models.ViewModelMain;
+import com.example.superdupercoolplantapp.background.models.AccountModel;
+import com.example.superdupercoolplantapp.background.viewmodels.ViewModelMain;
 
 public class Account extends Fragment {
     private MainActivity activity;

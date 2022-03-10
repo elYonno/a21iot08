@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.superdupercoolplantapp.models.ViewModelMain;
+import com.example.superdupercoolplantapp.background.viewmodels.ViewModelMain;
+import com.example.superdupercoolplantapp.background.viewmodels.ViewModelRecentReadings;
+import com.example.superdupercoolplantapp.background.models.AccountModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,7 +20,10 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private TextView title;
 
-    private ViewModelMain viewModel;
+    private ViewModelMain viewModelMain;
+    private ViewModelRecentReadings viewModelRecentReadings;
+
+    private AccountModel loggedInAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +43,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        viewModel = new ViewModelProvider(this).get(ViewModelMain.class);
+        viewModelMain = new ViewModelProvider(this).get(ViewModelMain.class);
+        viewModelMain.getLoggedInAccount().observe(this, this::updateAccount);
+        viewModelRecentReadings = new ViewModelProvider(this).get(ViewModelRecentReadings.class);
+
         logIn();
+    }
+
+    private void updateAccount(AccountModel accountModel) {
+        loggedInAccount = accountModel;
     }
 
     private void logIn() {
         // TODO a proper log in function
-        viewModel.logIn(this, "elYonno", "SUIIIII");
+        viewModelMain.logIn(this, "elYonno", "SUIIIII");
+    }
+
+    public void getMainData(int userID) {
+        viewModelRecentReadings.getRecentReadings(this, userID);
     }
 
     public void setText(String text) {
