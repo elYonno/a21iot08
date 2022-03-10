@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/home2">
+
+    <fragment
+        android:id="@+id/home2"
+        android:name="com.example.superdupercoolplantapp.fragments.Home"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/myPlants"
+        android:name="com.example.superdupercoolplantapp.fragments.MyPlants"
+        android:label="fragment_my_plants"
+        tools:layout="@layout/fragment_my_plants" >
+        <action
+            android:id="@+id/action_myPlants_to_newPlant"
+            app:destination="@id/newPlant" />
+        <action
+            android:id="@+id/action_myPlants_to_plantDetail"
+            app:destination="@id/plantDetail" />
+    </fragment>
+    <fragment
+        android:id="@+id/account"
+        android:name="com.example.superdupercoolplantapp.fragments.Account"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/log"
+        android:name="com.example.superdupercoolplantapp.fragments.Log"
+        android:label="fragment_log"
+        tools:layout="@layout/fragment_log" />
+    <fragment
+        android:id="@+id/newPlant"
+        android:name="com.example.superdupercoolplantapp.fragments.NewPlant"
+        android:label="fragment_new_plant"
+        tools:layout="@layout/fragment_new_plant" >
+        <argument
+            android:name="id_plant"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/plantDetail"
+        android:name="com.example.superdupercoolplantapp.fragments.PlantDetail"
+        android:label="fragment_plant_detail"
+        tools:layout="@layout/fragment_plant_detail" >
+        <argument
+            android:name="id_plant"
+            app:argType="integer" />
+    </fragment>
+</navigation>

@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">SuperDuperCoolPlantApp</string>
+    <string name="home">Home</string>
+    <string name="account">Account</string>
+    <string name="my_plants">My Plants</string>
+    <string name="log">Log</string>
+    <string name="search">Search</string>
+    <string name="next_scan">Next Scan</string>
+    <string name="previous_scans">Previous Scans</string>
+    <string name="add_plant">Add plant</string>
+
+    <!--emotions-->
+    <string name="happy_emo">😁</string>
+    <string name="angry_emo">😡</string>
+    <string name="thirsty_emo">🤤</string>
+    <string name="drowning_emo"></string>
+    <string name="hot_emo">🥵</string>
+    <string name="cold_emo">🥶</string>
+    <string name="dark_emo">🌚</string>
+    <string name="light_emo">🌞</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit_plant">Edit Plant</string>
+    <string name="delete_plant">Delete Plant</string>
+    <string name="scan_history">Scan History</string>
+    <string name="username">Username</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="update">Update</string>
+    <string name="log_out">Log Out</string>
+    <string name="type">Type</string>
+    <string name="smartpot_number">SmartPot Number</string>
+    <string name="parameters">Parameters</string>
+    <string name="temperature">Temperature</string>
+    <string name="temperature_unit">°C</string>
+    <string name="humidity">Humidity</string>
+    <string name="humidity_unit">g/m³</string>
+    <string name="light">Light</string>
+    <string name="light_unit">lux</string>
+    <string name="select_image">Select Image</string>
+    <string name="last_scan">Last Scan</string>
+    <string name="scan_results">Scan Results</string>
+    <string name="last_action">Last Action</string>
+    <string name="new_plant">New Plant</string>
+</resources>

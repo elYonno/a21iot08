@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="toolbar">#26282C</color>
+    <color name="background">#36393F</color>
+    <color name="iconic_green">#005500</color>
+    <color name="red">#CA2323</color>
+</resources>
