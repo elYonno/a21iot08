@@ -14,12 +14,12 @@ class UserController extends BaseController
             try {
                 $userModel = new UserModel();
  
-                // $intLimit = 10;
-                // if (isset($arrQueryStringParams['limit']) && $arrQueryStringParams['limit']) {
-                //     $intLimit = $arrQueryStringParams['limit'];
-                // }
+                $intLimit = 10;
+                if (isset($arrQueryStringParams['limit']) && $arrQueryStringParams['limit']) {
+                    $intLimit = $arrQueryStringParams['limit'];
+                }
  
-                $arrUsers = $userModel->getUsers();
+                $arrUsers = $userModel->getUsers($intLimit);
                 $responseData = json_encode($arrUsers);
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
@@ -43,5 +43,3 @@ class UserController extends BaseController
         }
     }
 }
-
-?>

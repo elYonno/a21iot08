@@ -52,5 +52,3 @@ class BaseController
         exit;
     }
 }
-
-?>
