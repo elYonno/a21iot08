@@ -31,7 +31,11 @@
         android:id="@+id/log"
         android:name="com.example.superdupercoolplantapp.fragments.Log"
         android:label="fragment_log"
-        tools:layout="@layout/fragment_log" />
+        tools:layout="@layout/fragment_log" >
+        <action
+            android:id="@+id/action_log_to_plantDetail"
+            app:destination="@id/plantDetail" />
+    </fragment>
     <fragment
         android:id="@+id/newPlant"
         android:name="com.example.superdupercoolplantapp.fragments.NewPlant"

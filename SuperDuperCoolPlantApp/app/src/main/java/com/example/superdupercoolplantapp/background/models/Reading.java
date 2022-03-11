@@ -29,20 +29,24 @@ public class Reading {
         this.timestamp = Utilities.stringToTimestamp(rawTimestamp);
     }
 
+    /**
+     * Creates list of emotions. If list is empty, plant is happy. If list has a size larger than 1,
+     * plant is angry as there are multiple problems.
+     * @param deltaLight difference in light to optimal
+     * @param deltaHumidity difference in humidity to optimal
+     * @param deltaTemp difference in temperature to optimal
+     */
     public void setEmotions(double deltaLight, double deltaHumidity, double deltaTemp) {
         emotions = new ArrayList<>();
 
-        if (Threshold.LIGHT > deltaLight) emotions.add(Emotion.LIGHT); // too light
+        if (Threshold.LIGHT < deltaLight) emotions.add(Emotion.LIGHT); // too light
         else if (-Threshold.LIGHT > deltaLight) emotions.add(Emotion.DARK); // too dark
 
-        if (Threshold.HUMIDITY > deltaHumidity) emotions.add(Emotion.HUMID); // too humid
+        if (Threshold.HUMIDITY < deltaHumidity) emotions.add(Emotion.HUMID); // too humid
         else if (-Threshold.HUMIDITY > deltaHumidity) emotions.add(Emotion.THIRSTY); // too dry
 
-        if (Threshold.TEMPERATURE > deltaHumidity) emotions.add(Emotion.HOT); // too hot
+        if (Threshold.TEMPERATURE < deltaHumidity) emotions.add(Emotion.HOT); // too hot
         else if (-Threshold.TEMPERATURE > deltaHumidity) emotions.add(Emotion.COLD); // too cold
-
-        if (emotions.size() == 0) emotions.add(Emotion.HAPPY); // all good
-        else if (emotions.size() > 1) emotions.add(Emotion.ANGRY); // multiple problems
     }
 
     public int getPlantID() {
@@ -67,5 +71,9 @@ public class Reading {
 
     public LocalDateTime getTimestamp() {
         return timestamp;
+    }
+
+    public ArrayList<Emotion> getEmotions() {
+        return emotions;
     }
 }

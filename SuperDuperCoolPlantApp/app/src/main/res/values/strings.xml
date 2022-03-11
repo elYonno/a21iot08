@@ -10,16 +10,6 @@
     <string name="add_plant">Add plant</string>
 
     <!--emotions-->
-    <string name="happy_emo">😁</string>
-    <string name="angry_emo">😡</string>
-    <string name="thirsty_emo">🤤</string>
-    <string name="drowning_emo"></string>
-    <string name="hot_emo">🥵</string>
-    <string name="cold_emo">🥶</string>
-    <string name="dark_emo">🌚</string>
-    <string name="light_emo">🌞</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="edit_plant">Edit Plant</string>
     <string name="delete_plant">Delete Plant</string>
     <string name="scan_history">Scan History</string>

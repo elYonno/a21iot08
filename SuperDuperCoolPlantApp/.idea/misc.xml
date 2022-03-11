@@ -31,6 +31,9 @@
         <entry key="..\:/Users/yonat/Documents/GitHub/a21iot08/SuperDuperCoolPlantApp/app/src/main/res/layout/rec_view_chat.xml" value="0.3087719298245614" />
         <entry key="..\:/Users/yonat/Documents/GitHub/a21iot08/SuperDuperCoolPlantApp/app/src/main/res/layout/rec_view_my_plants.xml" value="0.3087719298245614" />
         <entry key="..\:/Users/yonat/Documents/GitHub/a21iot08/SuperDuperCoolPlantApp/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/yonat/Documents/GitHub/a21iot08_GITHUB/SuperDuperCoolPlantApp/app/src/main/res/layout/fragment_log.xml" value="0.3161231884057971" />
+        <entry key="..\:/Users/yonat/Documents/GitHub/a21iot08_GITHUB/SuperDuperCoolPlantApp/app/src/main/res/layout/fragment_plant_detail.xml" value="0.3161231884057971" />
+        <entry key="..\:/Users/yonat/Documents/GitHub/a21iot08_GITHUB/SuperDuperCoolPlantApp/app/src/main/res/layout/rec_view_past.xml" value="0.75" />
         <entry key="app/src/main/res/drawable/roundcorners.xml" value="0.2085" />
         <entry key="app/src/main/res/drawable/roundstyle.xml" value="0.152" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.19610507246376813" />
@@ -44,7 +47,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

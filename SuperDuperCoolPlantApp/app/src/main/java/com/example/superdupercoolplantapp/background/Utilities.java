@@ -5,6 +5,7 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -16,11 +17,17 @@ public class Utilities {
         return LocalDateTime.parse(raw, formatter);
     }
 
-    public static String getMinutesAgo(LocalDateTime dateTime) {
+    public static String getHowLongAgo(LocalDateTime dateTime) {
         Duration duration = Duration.between(LocalDateTime.now(), dateTime);
         int minutes = (int) Math.abs(duration.getSeconds() / 60);
         if (minutes < 1) return "A few moments ago";
         else if (minutes == 1) return "A minute ago";
+        else if (minutes >= 60) {
+            int hours = (int) minutes / 60;
+            if (hours == 1) return  "An hour ago";
+            else if (hours < 24) return hours + " hours ago";
+            else return dateTime.toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        }
         else return minutes + " minutes ago";
     }
 }

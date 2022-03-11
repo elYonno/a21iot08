@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,13 +18,18 @@ import android.view.ViewGroup;
 import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.R;
 import com.example.superdupercoolplantapp.adapters.PastAdapter;
+import com.example.superdupercoolplantapp.background.models.Reading;
 import com.example.superdupercoolplantapp.background.viewmodels.ViewModelRecentReadings;
+
+import java.util.ArrayList;
 
 public class Log extends Fragment {
     private MainActivity activity;
 
     private RecyclerView future;
+
     private RecyclerView past;
+    private PastAdapter pastAdapter;
 
     @Nullable
     @Override
@@ -35,6 +42,7 @@ public class Log extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        NavController navController = Navigation.findNavController(view);
 
         //TODO: create adapters
         future = view.findViewById(R.id.log_future_rec);
@@ -42,9 +50,15 @@ public class Log extends Fragment {
 
         past = view.findViewById(R.id.log_past_rec);
         past.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        ViewModelRecentReadings readings = new ViewModelProvider(activity).get(ViewModelRecentReadings.class);
-        PastAdapter pastAdapter = new PastAdapter(activity, view, readings);
+        pastAdapter = new PastAdapter(navController);
         past.setAdapter(pastAdapter);
+
+        ViewModelRecentReadings readings = new ViewModelProvider(activity).get(ViewModelRecentReadings.class);
+        readings.getReadings().observe(activity, this::updatePast);
+    }
+
+    private void updatePast(ArrayList<Reading> readings) {
+        pastAdapter.update(readings);
     }
 
     @Override

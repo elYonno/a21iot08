@@ -13,25 +13,24 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.R;
+import com.example.superdupercoolplantapp.background.Emotion;
+import com.example.superdupercoolplantapp.background.LanguageModel;
 import com.example.superdupercoolplantapp.background.Utilities;
 import com.example.superdupercoolplantapp.background.models.Reading;
-import com.example.superdupercoolplantapp.background.viewmodels.ViewModelRecentReadings;
+import com.example.superdupercoolplantapp.fragments.LogDirections;
 
 import java.util.ArrayList;
 
 public class PastAdapter extends RecyclerView.Adapter<PastAdapter.ViewHolder> {
     private ArrayList<Reading> readings;
-    private final View view;
-    private NavController navController;
+    private final NavController navController;
 
-    public PastAdapter(MainActivity mainActivity, View view, ViewModelRecentReadings viewModel) {
-        this.view = view;
-        viewModel.getReadings().observe(mainActivity, this::onReadingChange);
+    public PastAdapter(NavController navController) {
+        this.navController = navController;
     }
 
-    private void onReadingChange(ArrayList<Reading> readings) {
+    public void update(ArrayList<Reading> readings) {
         this.readings = readings;
         notifyDataSetChanged();
     }
@@ -39,7 +38,6 @@ public class PastAdapter extends RecyclerView.Adapter<PastAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        navController = Navigation.findNavController(view);
         View card = LayoutInflater.from(parent.getContext()).inflate(R.layout.rec_view_past, parent, false);
         return new ViewHolder(card);
     }
@@ -48,13 +46,21 @@ public class PastAdapter extends RecyclerView.Adapter<PastAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Reading reading = readings.get(position);
+        ArrayList<Emotion> emotions = reading.getEmotions();
 
-        holder.name.setText(reading.getPlantName());
-        holder.time.setText(Utilities.getMinutesAgo(reading.getTimestamp()));
+        if (emotions.size() > 1) // angry
+            holder.name.setText(String.format("%s\t%s", reading.getPlantName(), Emotion.ANGRY.getEmoji()));
+        else // everything else
+            holder.name.setText(reading.getPlantName());
 
-        // TODO work out emotion in SQL? then comment from emotion
+        holder.time.setText(Utilities.getHowLongAgo(reading.getTimestamp()));
 
+        holder.comment.setText(LanguageModel.getComments(reading.getPlantName(), reading.getEmotions()));
 
+        holder.cardView.setOnClickListener(view -> {
+            LogDirections.ActionLogToPlantDetail action = LogDirections.actionLogToPlantDetail(reading.getPlantID());
+            navController.navigate(action);
+        });
     }
 
     @Override
