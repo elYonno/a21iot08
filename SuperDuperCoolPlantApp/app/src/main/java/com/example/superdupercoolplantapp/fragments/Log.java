@@ -24,7 +24,7 @@ import com.example.superdupercoolplantapp.adapters.PastAdapter;
 import com.example.superdupercoolplantapp.background.models.NextScan;
 import com.example.superdupercoolplantapp.background.models.Reading;
 import com.example.superdupercoolplantapp.background.viewmodels.ViewModelNextScans;
-import com.example.superdupercoolplantapp.background.viewmodels.ViewModelRecentReadings;
+import com.example.superdupercoolplantapp.background.viewmodels.ViewModelReadings;
 
 import java.util.ArrayList;
 
@@ -59,8 +59,8 @@ public class Log extends Fragment {
         pastAdapter = new PastAdapter(navController);
         past.setAdapter(pastAdapter);
 
-        ViewModelRecentReadings readings = new ViewModelProvider(activity).get(ViewModelRecentReadings.class);
-        readings.getReadings().observe(activity, this::updatePast);
+        ViewModelReadings readings = new ViewModelProvider(activity).get(ViewModelReadings.class);
+        readings.getRecentReadings().observe(activity, this::updatePast);
 
         ViewModelNextScans nextScans = new ViewModelProvider(activity).get(ViewModelNextScans.class);
         nextScans.getNextScans(activity, activity.getAccount().getUserID());

@@ -47,7 +47,6 @@ public class ViewModelAccount extends ViewModel {
                     String email = o.getString("emailAddress");
 
                     updateUser(new AccountModel(userID, username, realName, phoneNumber, email, password));
-                    mainActivity.getMainData(userID);
                 } catch (JSONException e) {
                     Toast.makeText(mainActivity, "Incorrect username/password.", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();

@@ -13,6 +13,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.background.APIs;
+import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.background.models.Reading;
 
 import org.json.JSONException;
@@ -20,14 +21,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ViewModelRecentReadings extends ViewModel {
+public class ViewModelReadings extends ViewModel {
     private static final String TAG = "ViewModelRecentReadings";
 
-    private final MutableLiveData<ArrayList<Reading>> readings = new MutableLiveData<>();
+    private final MutableLiveData<ArrayList<Reading>> recentReadings = new MutableLiveData<>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void getRecentReadings(MainActivity mainActivity, int userID) {
-        String readings = APIs.RECENT_READINGS + userID;
+    public void queryRecentReadings(MainActivity mainActivity, Plant plant) {
+        String readings = APIs.RECENT_READINGS + plant.getPlantID();
 
         RequestQueue requestQueue = Volley.newRequestQueue(mainActivity);
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, readings, null,
@@ -40,15 +41,13 @@ public class ViewModelRecentReadings extends ViewModel {
 
                             if (object == null) throw new JSONException(TAG);
                             else {
-                                int plantID = object.getInt("plantID");
-                                String plantName = object.getString("plantName");
                                 String timestamp = object.getString("timestamp");
                                 double lightValue = object.getDouble("lightValue");
                                 double humidityValue = object.getDouble("humidityValue");
                                 double tempValue = object.getDouble("tempValue");
 
-                                Reading newReading = new Reading(plantID, plantName, timestamp, lightValue,
-                                        humidityValue, tempValue);
+                                Reading newReading = new Reading(plant.getPlantID(), plant.getPlantName(),
+                                        timestamp, lightValue, humidityValue, tempValue);
 
                                 double deltaLight = object.getDouble("deltaLight");
                                 double deltaHumidity = object.getDouble("deltaHumidity");
@@ -56,10 +55,11 @@ public class ViewModelRecentReadings extends ViewModel {
 
                                 newReading.setEmotions(deltaLight, deltaHumidity, deltaTemp);
                                 newReadings.add(newReading);
+                                plant.addReading(newReading);
                             }
                         }
 
-                        setReadings(newReadings);
+                        this.recentReadings.setValue(newReadings);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -68,11 +68,7 @@ public class ViewModelRecentReadings extends ViewModel {
         requestQueue.add(request);
     }
 
-    public void setReadings(ArrayList<Reading> readings) {
-        this.readings.setValue(readings);
-    }
-
-    public MutableLiveData<ArrayList<Reading>> getReadings() {
-        return readings;
+    public MutableLiveData<ArrayList<Reading>> getRecentReadings() {
+        return recentReadings;
     }
 }

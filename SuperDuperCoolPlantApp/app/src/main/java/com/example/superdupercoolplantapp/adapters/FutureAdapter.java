@@ -53,7 +53,8 @@ public class FutureAdapter extends RecyclerView.Adapter<FutureAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return nextScans.size();
+        if (nextScans != null) return nextScans.size();
+        else return 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

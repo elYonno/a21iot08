@@ -12,12 +12,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.background.viewmodels.ViewModelAccount;
 import com.example.superdupercoolplantapp.background.viewmodels.ViewModelMyPlants;
-import com.example.superdupercoolplantapp.background.viewmodels.ViewModelNextScans;
-import com.example.superdupercoolplantapp.background.viewmodels.ViewModelRecentReadings;
+import com.example.superdupercoolplantapp.background.viewmodels.ViewModelReadings;
 import com.example.superdupercoolplantapp.background.models.AccountModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView title;
 
     private ViewModelAccount viewModelAccount;
-    private ViewModelRecentReadings viewModelRecentReadings;
+    private ViewModelReadings viewModelReadings;
     private ViewModelMyPlants viewModelMyPlants;
 
     private AccountModel loggedInAccount;
@@ -51,14 +53,25 @@ public class MainActivity extends AppCompatActivity {
 
         viewModelAccount = new ViewModelProvider(this).get(ViewModelAccount.class);
         viewModelAccount.getLoggedInAccount().observe(this, this::updateAccount);
-        viewModelRecentReadings = new ViewModelProvider(this).get(ViewModelRecentReadings.class);
+
+        viewModelReadings = new ViewModelProvider(this).get(ViewModelReadings.class);
+
         viewModelMyPlants = new ViewModelProvider(this).get(ViewModelMyPlants.class);
+        viewModelMyPlants.getPlants().observe(this, this::updatePlant);
 
         logIn();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void updatePlant(ArrayList<Plant> plants) {
+        for (Plant plant : plants) {
+            viewModelReadings.queryRecentReadings(this, plant);
+        }
+    }
+
     private void updateAccount(AccountModel accountModel) {
         loggedInAccount = accountModel;
+        viewModelMyPlants.getPlants(this, loggedInAccount.getUserID());
     }
 
     public AccountModel getAccount() { return loggedInAccount; }
@@ -67,12 +80,6 @@ public class MainActivity extends AppCompatActivity {
     private void logIn() {
         // TODO a proper log in function
         viewModelAccount.logIn(this, "elYonno", "SUIIIII");
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void getMainData(int userID) {
-        viewModelRecentReadings.getRecentReadings(this, userID);
-        viewModelMyPlants.getPlants(this, userID);
     }
 
     public void setText(String text) {

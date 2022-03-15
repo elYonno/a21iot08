@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class ViewModelNextScans extends ViewModel {
     public static final String TAG = "ViewModelGetNextScans";
 
-    private MutableLiveData<ArrayList<NextScan>> nextScans = new MutableLiveData<>();
+    private final MutableLiveData<ArrayList<NextScan>> nextScans = new MutableLiveData<>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void getNextScans(MainActivity mainActivity, int userID) {

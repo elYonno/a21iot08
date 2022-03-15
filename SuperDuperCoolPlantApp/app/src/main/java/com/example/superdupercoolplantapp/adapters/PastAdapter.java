@@ -65,7 +65,8 @@ public class PastAdapter extends RecyclerView.Adapter<PastAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return readings.size();
+        if (readings != null) return readings.size();
+        else return 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
