@@ -1,9 +1,11 @@
 package com.example.superdupercoolplantapp.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -40,6 +42,7 @@ public class Log extends Fragment {
         return inflater.inflate(R.layout.fragment_log, container, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -60,6 +63,7 @@ public class Log extends Fragment {
         readings.getReadings().observe(activity, this::updatePast);
 
         ViewModelNextScans nextScans = new ViewModelProvider(activity).get(ViewModelNextScans.class);
+        nextScans.getNextScans(activity, activity.getAccount().getUserID());
         nextScans.getNextScans().observe(activity, this::updateFuture);
     }
 

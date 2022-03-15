@@ -48,10 +48,9 @@ public class ViewModelNextScans extends ViewModel {
 
                     int plantID = o.getInt("plantID");
                     String plantName = o.getString("plantName");
-                    int potNumber = o.getInt("potNumber");
                     String nextScan = o.getString("nextScan");
 
-                    NextScan newScan = new NextScan(plantID, potNumber, plantName, nextScan);
+                    NextScan newScan = new NextScan(plantID, plantName, nextScan);
                     newNextScans.add(newScan);
                 }
 

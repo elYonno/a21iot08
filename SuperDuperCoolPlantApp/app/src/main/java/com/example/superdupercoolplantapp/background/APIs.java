@@ -6,4 +6,6 @@ public class APIs {
 
     public final static String RECENT_READINGS = "https://studev.groept.be/api/a21iot08/App_GetRecentReadings/"; // userID
     public final static String GET_NEXT_SCANS = "https://studev.groept.be/api/a21iot08/App_GetNextScans/"; // userID
+
+    public final static String GET_PLANTS = "https://studev.groept.be/api/a21iot08/App_GetPlants/"; // userID
 }

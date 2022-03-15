@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.superdupercoolplantapp.background.viewmodels.ViewModelAccount;
+import com.example.superdupercoolplantapp.background.viewmodels.ViewModelMyPlants;
 import com.example.superdupercoolplantapp.background.viewmodels.ViewModelNextScans;
 import com.example.superdupercoolplantapp.background.viewmodels.ViewModelRecentReadings;
 import com.example.superdupercoolplantapp.background.models.AccountModel;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewModelAccount viewModelAccount;
     private ViewModelRecentReadings viewModelRecentReadings;
-    private ViewModelNextScans viewModelGetNextScans;
+    private ViewModelMyPlants viewModelMyPlants;
 
     private AccountModel loggedInAccount;
 
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         viewModelAccount = new ViewModelProvider(this).get(ViewModelAccount.class);
         viewModelAccount.getLoggedInAccount().observe(this, this::updateAccount);
         viewModelRecentReadings = new ViewModelProvider(this).get(ViewModelRecentReadings.class);
-        viewModelGetNextScans = new ViewModelProvider(this).get(ViewModelNextScans.class);
+        viewModelMyPlants = new ViewModelProvider(this).get(ViewModelMyPlants.class);
 
         logIn();
     }
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void getMainData(int userID) {
         viewModelRecentReadings.getRecentReadings(this, userID);
-        viewModelGetNextScans.getNextScans(this, userID);
+        viewModelMyPlants.getPlants(this, userID);
     }
 
     public void setText(String text) {

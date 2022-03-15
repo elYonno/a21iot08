@@ -45,8 +45,8 @@ public class Reading {
         if (Threshold.HUMIDITY < deltaHumidity) emotions.add(Emotion.HUMID); // too humid
         else if (-Threshold.HUMIDITY > deltaHumidity) emotions.add(Emotion.THIRSTY); // too dry
 
-        if (Threshold.TEMPERATURE < deltaHumidity) emotions.add(Emotion.HOT); // too hot
-        else if (-Threshold.TEMPERATURE > deltaHumidity) emotions.add(Emotion.COLD); // too cold
+        if (Threshold.TEMPERATURE < deltaTemp) emotions.add(Emotion.HOT); // too hot
+        else if (-Threshold.TEMPERATURE > deltaTemp) emotions.add(Emotion.COLD); // too cold
     }
 
     public int getPlantID() {
