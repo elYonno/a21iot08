@@ -17,8 +17,11 @@ import android.view.ViewGroup;
 
 import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.R;
+import com.example.superdupercoolplantapp.adapters.FutureAdapter;
 import com.example.superdupercoolplantapp.adapters.PastAdapter;
+import com.example.superdupercoolplantapp.background.models.NextScan;
 import com.example.superdupercoolplantapp.background.models.Reading;
+import com.example.superdupercoolplantapp.background.viewmodels.ViewModelNextScans;
 import com.example.superdupercoolplantapp.background.viewmodels.ViewModelRecentReadings;
 
 import java.util.ArrayList;
@@ -26,10 +29,8 @@ import java.util.ArrayList;
 public class Log extends Fragment {
     private MainActivity activity;
 
-    private RecyclerView future;
-
-    private RecyclerView past;
     private PastAdapter pastAdapter;
+    private FutureAdapter futureAdapter;
 
     @Nullable
     @Override
@@ -45,16 +46,25 @@ public class Log extends Fragment {
         NavController navController = Navigation.findNavController(view);
 
         //TODO: create adapters
-        future = view.findViewById(R.id.log_future_rec);
+        RecyclerView future = view.findViewById(R.id.log_future_rec);
         future.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        futureAdapter = new FutureAdapter(navController);
+        future.setAdapter(futureAdapter);
 
-        past = view.findViewById(R.id.log_past_rec);
+        RecyclerView past = view.findViewById(R.id.log_past_rec);
         past.setLayoutManager(new LinearLayoutManager(this.getContext()));
         pastAdapter = new PastAdapter(navController);
         past.setAdapter(pastAdapter);
 
         ViewModelRecentReadings readings = new ViewModelProvider(activity).get(ViewModelRecentReadings.class);
         readings.getReadings().observe(activity, this::updatePast);
+
+        ViewModelNextScans nextScans = new ViewModelProvider(activity).get(ViewModelNextScans.class);
+        nextScans.getNextScans().observe(activity, this::updateFuture);
+    }
+
+    private void updateFuture(ArrayList<NextScan> nextScans) {
+        futureAdapter.update(nextScans);
     }
 
     private void updatePast(ArrayList<Reading> readings) {

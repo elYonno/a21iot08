@@ -17,15 +17,14 @@ import android.widget.TextView;
 import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.R;
 import com.example.superdupercoolplantapp.background.models.AccountModel;
-import com.example.superdupercoolplantapp.background.viewmodels.ViewModelMain;
+import com.example.superdupercoolplantapp.background.viewmodels.ViewModelAccount;
 
 public class Account extends Fragment {
     private MainActivity activity;
-    private ViewModelMain viewModel;
+    private ViewModelAccount viewModel;
 
     private TextView accountUsername;
     private EditText accountName, accountPassword, accountEmail, accountNumber;
-    private Button update, logout;
 
     @Nullable
     @Override
@@ -45,13 +44,34 @@ public class Account extends Fragment {
         accountEmail = view.findViewById(R.id.account_email);
         accountNumber = view.findViewById(R.id.account_phone);
 
-        update = view.findViewById(R.id.account_update);
+        Button update = view.findViewById(R.id.account_update);
+        update.setOnClickListener(this::updateUser);
 
-        logout = view.findViewById(R.id.account_logout);
+        Button logout = view.findViewById(R.id.account_logout);
 
-        viewModel = new ViewModelProvider(activity).get(ViewModelMain.class);
+        viewModel = new ViewModelProvider(activity).get(ViewModelAccount.class);
         viewModel.getLoggedInAccount().observe(getViewLifecycleOwner(), this::onAccountChanged);
 
+    }
+
+    private void updateUser(View view) {
+        // TODO verify with password first
+        String realName, password, email, phoneNumber;
+
+        realName = accountName.getText().toString();
+        password = accountPassword.getText().toString();
+        email = accountEmail.getText().toString();
+        phoneNumber = accountNumber.getText().toString();
+
+        if (!realName.equals("") && !password.equals("") && !email.equals("") && !phoneNumber.equals("")) {
+            AccountModel model = new AccountModel(
+                    activity.getAccount().getUserID(),
+                    activity.getAccount().getUserName(),
+                    realName, phoneNumber, email, password
+                    );
+
+            viewModel.updateLogIn(activity, model);
+        }
     }
 
     @Override

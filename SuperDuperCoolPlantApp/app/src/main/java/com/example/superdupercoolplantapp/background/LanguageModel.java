@@ -16,9 +16,9 @@ public class LanguageModel {
                 else if (emotion == Emotion.HUMID)
                     comments.append(Emotion.HUMID.getEmoji()).append("\t").append(plantName).append(" has too much water. We will slow down with the water.");
                 else if (emotion == Emotion.COLD)
-                    comments.append(Emotion.COLD.getEmoji()).append("\t").append(plantName).append(" is cold. We will turn up the lights.");
+                    comments.append(Emotion.COLD.getEmoji()).append("\t").append(plantName).append(" is cold. Please move the plant to a warmer place.");
                 else if (emotion == Emotion.HOT)
-                    comments.append(Emotion.HOT.getEmoji()).append("\t").append(plantName).append(" is hot. We will dim the lights.");
+                    comments.append(Emotion.HOT.getEmoji()).append("\t").append(plantName).append(" is hot. Please move the plant to a cooler place.");
                 else if (emotion == Emotion.DARK)
                     comments.append(Emotion.DARK.getEmoji()).append("\t").append(plantName).append(" is not getting enough light. We will turn up the lights.");
                 else if (emotion == Emotion.LIGHT)

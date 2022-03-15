@@ -1,16 +1,19 @@
 package com.example.superdupercoolplantapp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.superdupercoolplantapp.background.viewmodels.ViewModelMain;
+import com.example.superdupercoolplantapp.background.viewmodels.ViewModelAccount;
+import com.example.superdupercoolplantapp.background.viewmodels.ViewModelNextScans;
 import com.example.superdupercoolplantapp.background.viewmodels.ViewModelRecentReadings;
 import com.example.superdupercoolplantapp.background.models.AccountModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -20,8 +23,9 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private TextView title;
 
-    private ViewModelMain viewModelMain;
+    private ViewModelAccount viewModelAccount;
     private ViewModelRecentReadings viewModelRecentReadings;
+    private ViewModelNextScans viewModelGetNextScans;
 
     private AccountModel loggedInAccount;
 
@@ -39,13 +43,15 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onStart() {
         super.onStart();
 
-        viewModelMain = new ViewModelProvider(this).get(ViewModelMain.class);
-        viewModelMain.getLoggedInAccount().observe(this, this::updateAccount);
+        viewModelAccount = new ViewModelProvider(this).get(ViewModelAccount.class);
+        viewModelAccount.getLoggedInAccount().observe(this, this::updateAccount);
         viewModelRecentReadings = new ViewModelProvider(this).get(ViewModelRecentReadings.class);
+        viewModelGetNextScans = new ViewModelProvider(this).get(ViewModelNextScans.class);
 
         logIn();
     }
@@ -54,13 +60,18 @@ public class MainActivity extends AppCompatActivity {
         loggedInAccount = accountModel;
     }
 
+    public AccountModel getAccount() { return loggedInAccount; }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void logIn() {
         // TODO a proper log in function
-        viewModelMain.logIn(this, "elYonno", "SUIIIII");
+        viewModelAccount.logIn(this, "elYonno", "SUIIIII");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void getMainData(int userID) {
         viewModelRecentReadings.getRecentReadings(this, userID);
+        viewModelGetNextScans.getNextScans(this, userID);
     }
 
     public void setText(String text) {

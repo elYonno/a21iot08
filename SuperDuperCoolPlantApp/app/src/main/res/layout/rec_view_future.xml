@@ -24,6 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_weight="1"
+                android:paddingStart="8dp"
                 android:text="TextView"
                 android:textStyle="bold" />
 
@@ -33,6 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_weight="1"
+                android:paddingEnd="8dp"
                 android:text="TextView"
                 android:textAlignment="viewEnd" />
         </LinearLayout>
