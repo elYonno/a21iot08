@@ -74,4 +74,9 @@ public class Plant {
             else emotion = Emotion.ANGRY;                                                       // multiple problems
         }
     }
+
+    public Reading getMostRecentReading() {
+        if (recentReadings.size() != 0) return recentReadings.get(0);
+        else return null;
+    }
 }

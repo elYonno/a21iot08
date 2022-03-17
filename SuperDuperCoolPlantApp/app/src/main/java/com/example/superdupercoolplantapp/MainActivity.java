@@ -71,7 +71,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateAccount(AccountModel accountModel) {
         loggedInAccount = accountModel;
-        viewModelMyPlants.getPlants(this, loggedInAccount.getUserID());
+        viewModelMyPlants.queryPlants(this, loggedInAccount.getUserID());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public Plant getPlant(int id) {
+        return viewModelMyPlants.getPlantByID(id);
     }
 
     public AccountModel getAccount() { return loggedInAccount; }

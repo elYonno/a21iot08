@@ -3,6 +3,7 @@ package com.example.superdupercoolplantapp.fragments;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,9 +15,18 @@ import android.view.ViewGroup;
 import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.R;
 import com.example.superdupercoolplantapp.adapters.ChatAdapter;
+import com.example.superdupercoolplantapp.background.models.Plant;
+import com.example.superdupercoolplantapp.background.models.Reading;
+import com.example.superdupercoolplantapp.background.viewmodels.ViewModelMyPlants;
+import com.example.superdupercoolplantapp.background.viewmodels.ViewModelReadings;
+
+import java.util.ArrayList;
 
 public class Home extends Fragment {
     private MainActivity activity;
+
+    private ChatAdapter adapter;
+    private ArrayList<Plant> plants;
 
     @Nullable
     @Override
@@ -33,8 +43,21 @@ public class Home extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.home_rec_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        ChatAdapter adapter = new ChatAdapter();
+        adapter = new ChatAdapter(activity);
         recyclerView.setAdapter(adapter);
+
+        ViewModelReadings viewModelReadings = new ViewModelProvider(activity).get(ViewModelReadings.class);
+        viewModelReadings.getRecentReadings().observe(activity, this::onReadingChange);
+        ViewModelMyPlants viewModelMyPlants = new ViewModelProvider(activity).get(ViewModelMyPlants.class);
+        viewModelMyPlants.getPlants().observe(activity, this::onPlantsChange);
+    }
+
+    private void onPlantsChange(ArrayList<Plant> plants) {
+        this.plants = plants;
+    }
+
+    private void onReadingChange(ArrayList<Reading> readings) {
+        adapter.setPlants(plants);
     }
 
     @Override

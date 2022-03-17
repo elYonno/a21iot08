@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class ViewModelReadings extends ViewModel {
     private static final String TAG = "ViewModelRecentReadings";
 
-    private final MutableLiveData<ArrayList<Reading>> recentReadings = new MutableLiveData<>();
+    private final MutableLiveData<ArrayList<Reading>> recentReadings = new MutableLiveData<>(); // maximum 5
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void queryRecentReadings(MainActivity mainActivity, Plant plant) {

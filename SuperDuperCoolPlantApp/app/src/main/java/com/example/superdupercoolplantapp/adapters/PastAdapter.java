@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.superdupercoolplantapp.R;
@@ -55,7 +54,7 @@ public class PastAdapter extends RecyclerView.Adapter<PastAdapter.ViewHolder> {
 
         holder.time.setText(Utilities.getHowLongAgo(reading.getTimestamp()));
 
-        holder.comment.setText(LanguageModel.getComments(reading.getPlantName(), reading.getEmotions()));
+        holder.comment.setText(LanguageModel.logEngine(reading.getPlantName(), reading.getEmotions()));
 
         holder.cardView.setOnClickListener(view -> {
             LogDirections.ActionLogToPlantDetail action = LogDirections.actionLogToPlantDetail(reading.getPlantID());

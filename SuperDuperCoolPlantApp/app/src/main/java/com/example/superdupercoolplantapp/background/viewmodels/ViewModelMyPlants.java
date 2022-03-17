@@ -1,7 +1,9 @@
 package com.example.superdupercoolplantapp.background.viewmodels;
 
+import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -18,13 +20,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Optional;
 
 public class ViewModelMyPlants extends ViewModel {
     public static final String TAG = "ViewModelMyPlants";
 
     private final MutableLiveData<ArrayList<Plant>> plants = new MutableLiveData<>();
 
-    public void getPlants(MainActivity mainActivity, int userID) {
+    public void queryPlants(MainActivity mainActivity, int userID) {
         String link = APIs.GET_PLANTS + userID;
 
         RequestQueue requestQueue = Volley.newRequestQueue(mainActivity);
@@ -58,5 +62,14 @@ public class ViewModelMyPlants extends ViewModel {
 
     public MutableLiveData<ArrayList<Plant>> getPlants() {
         return plants;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public Plant getPlantByID(int id) {
+        return Objects.requireNonNull(plants.getValue())
+                .stream()
+                .filter(t -> t.getPlantID() == id)
+                .findFirst()
+                .orElse(null);
     }
 }

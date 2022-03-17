@@ -87,6 +87,7 @@ public class ViewModelAccount extends ViewModel {
 
     private void updateUser(AccountModel user) {
         loggedInAccount.setValue(user);
+        CommonStorage.INSTANCE.setUserRealName(user.getRealName());
     }
 
 }
