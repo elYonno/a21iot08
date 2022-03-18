@@ -66,7 +66,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
 
         holder.chat.setText(chat.getMessage());
-        holder.time.setText(Utilities.getInHowLong(chat.getReading().getTimestamp()));
+        holder.time.setText(Utilities.getFormattedTime(chat.getReading().getTimestamp()));
     }
 
     @Override

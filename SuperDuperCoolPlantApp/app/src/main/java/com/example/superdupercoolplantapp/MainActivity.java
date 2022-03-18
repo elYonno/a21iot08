@@ -74,11 +74,6 @@ public class MainActivity extends AppCompatActivity {
         viewModelMyPlants.queryPlants(this, loggedInAccount.getUserID());
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public Plant getPlant(int id) {
-        return viewModelMyPlants.getPlantByID(id);
-    }
-
     public AccountModel getAccount() { return loggedInAccount; }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

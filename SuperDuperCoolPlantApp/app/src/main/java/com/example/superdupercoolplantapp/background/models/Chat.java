@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import com.example.superdupercoolplantapp.background.Emotion;
 import com.example.superdupercoolplantapp.background.LanguageModel;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 
 public class Chat {
@@ -38,8 +39,8 @@ public class Chat {
         ArrayList<Emotion> emotions = reading.getEmotions();
 
         // bot asks how the plant is doing
-        chats.add(new Chat("Hey " + plant.getPlantName() + "! How are you doing?",
-                null, reading));
+        chats.add(new Chat(MessageFormat.format("Hey {0}! How are you doing?",
+                plant.getPlantName()), null, reading));
 
         for (Emotion emotion : emotions) {
             String plantMessage = LanguageModel.plantChatEngine(emotion);

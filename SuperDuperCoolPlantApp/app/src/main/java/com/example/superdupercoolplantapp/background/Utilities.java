@@ -38,9 +38,13 @@ public class Utilities {
         else if (minutes >= 60) {
             int hours = minutes / 60;
             if (hours == 1) return  "In one hour";
-            else if (hours < 24) return "In" + hours + " hours";
+            else if (hours < 24) return "In " + hours + " hours";
             else return dateTime.toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         }
         else return "In " + minutes + " minutes";
+    }
+
+    public static String getFormattedTime(LocalDateTime dateTime) {
+        return dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm"));
     }
 }

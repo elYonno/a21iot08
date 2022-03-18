@@ -53,5 +53,8 @@
         <argument
             android:name="id_plant"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_plantDetail_to_newPlant"
+            app:destination="@id/newPlant" />
     </fragment>
 </navigation>
