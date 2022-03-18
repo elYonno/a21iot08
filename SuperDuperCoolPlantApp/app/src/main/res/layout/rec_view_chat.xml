@@ -12,9 +12,9 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/rec_view_chat_name"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@mipmap/ic_flora_bot" />
 
     <TextView
         android:id="@+id/rec_view_chat_name"
@@ -22,8 +22,8 @@
         android:layout_height="wrap_content"
         android:text="Name"
         android:textAlignment="center"
-        app:layout_constraintStart_toStartOf="@+id/rec_view_chat_image"
-        app:layout_constraintTop_toBottomOf="@+id/rec_view_chat_image" />
+        app:layout_constraintEnd_toEndOf="@+id/rec_view_chat_image"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <LinearLayout
         android:id="@+id/linearLayout"

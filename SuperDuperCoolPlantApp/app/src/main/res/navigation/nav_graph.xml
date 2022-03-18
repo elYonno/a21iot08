@@ -9,7 +9,11 @@
         android:id="@+id/home2"
         android:name="com.example.superdupercoolplantapp.fragments.Home"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home2_to_plantDetail"
+            app:destination="@id/plantDetail" />
+    </fragment>
     <fragment
         android:id="@+id/myPlants"
         android:name="com.example.superdupercoolplantapp.fragments.MyPlants"

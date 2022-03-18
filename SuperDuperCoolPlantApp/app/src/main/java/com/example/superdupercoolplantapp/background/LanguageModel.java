@@ -47,7 +47,7 @@ public class LanguageModel {
     }
 
     public static String botResponseEngine(Emotion emotion, String plantName) {
-        if (emotion == Emotion.HAPPY) return "That's great to hear!";
+        if (emotion == Emotion.HAPPY) return "That's great to hear! I'll try to maintain the current conditions!";
         else if (emotion == Emotion.THIRSTY) return "I'll add some water!";
         else if (emotion == Emotion.HUMID) return "I'll slow down with the water!";
         else if (emotion == Emotion.COLD) return

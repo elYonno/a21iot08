@@ -5,6 +5,7 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -45,6 +46,9 @@ public class Utilities {
     }
 
     public static String getFormattedTime(LocalDateTime dateTime) {
-        return dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm"));
+        LocalDate today = LocalDate.now();
+        if (today.isEqual(dateTime.toLocalDate()))
+                return dateTime.format(DateTimeFormatter.ofPattern("HH:mm"));               // same date
+        else    return dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));    // different date
     }
 }

@@ -42,16 +42,24 @@ public class Chat {
         chats.add(new Chat(MessageFormat.format("Hey {0}! How are you doing?",
                 plant.getPlantName()), null, reading));
 
-        for (Emotion emotion : emotions) {
-            String plantMessage = LanguageModel.plantChatEngine(emotion);
+        if (emotions.size() == 0) { // happy
+            String plantMessage = LanguageModel.plantChatEngine(Emotion.HAPPY);
+            chats.add(new Chat(plantMessage, plant, reading));
 
-            if (plantMessage != null) {
-                chats.add(new Chat(plantMessage, plant, reading));
-
-                String botResponse = LanguageModel.botResponseEngine(emotion, plant.getPlantName());
-                if (botResponse != null) chats.add(new Chat(botResponse, null, reading));
-            }
+            String botResponse = LanguageModel.botResponseEngine(Emotion.HAPPY, plant.getPlantName());
+            chats.add(new Chat(botResponse, null, reading));
         }
+        else // something else
+            for (Emotion emotion : emotions) {
+                String plantMessage = LanguageModel.plantChatEngine(emotion);
+
+                if (plantMessage != null) {
+                    chats.add(new Chat(plantMessage, plant, reading));
+
+                    String botResponse = LanguageModel.botResponseEngine(emotion, plant.getPlantName());
+                    if (botResponse != null) chats.add(new Chat(botResponse, null, reading));
+                }
+            }
 
         return chats;
     }
