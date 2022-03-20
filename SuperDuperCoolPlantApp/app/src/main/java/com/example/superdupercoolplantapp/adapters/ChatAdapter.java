@@ -61,6 +61,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.profilePicture.setImageDrawable(ContextCompat.getDrawable(activity, R.mipmap.ic_flora_bot));
         } else { // plant message
             holder.plantName.setText(chat.getPlant().getPlantName());
+            holder.plantName.setSelected(true);
             Bitmap profilePic = Base64Tool.decodeImage(chat.getPlant().getImage());
             holder.profilePicture.setImageBitmap(profilePic);
         }
