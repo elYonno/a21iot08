@@ -10,7 +10,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.superdupercoolplantapp.MainActivity;
@@ -20,6 +23,7 @@ import com.example.superdupercoolplantapp.background.Utilities;
 import com.example.superdupercoolplantapp.background.models.Chat;
 import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.background.models.Reading;
+import com.example.superdupercoolplantapp.fragments.HomeDirections;
 
 import java.util.ArrayList;
 
@@ -64,6 +68,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.plantName.setSelected(true);
             Bitmap profilePic = Base64Tool.decodeImage(chat.getPlant().getImage());
             holder.profilePicture.setImageBitmap(profilePic);
+
+            holder.layout.setOnClickListener(view -> {
+                NavController navController = Navigation.findNavController(view);
+                HomeDirections.ActionHome2ToPlantDetail action =
+                        HomeDirections.actionHome2ToPlantDetail(chat.getPlant().getPlantID());
+                navController.navigate(action);
+            });
         }
 
         holder.chat.setText(chat.getMessage());
@@ -79,6 +90,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView profilePicture;
         private final TextView chat, plantName, time;
+        private final ConstraintLayout layout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -87,6 +99,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             chat = itemView.findViewById(R.id.rec_view_chat_text);
             plantName = itemView.findViewById(R.id.rec_view_chat_name);
             time = itemView.findViewById(R.id.rec_view_chat_time);
+            layout = itemView.findViewById(R.id.rec_view_chat_layout);
         }
     }
 }
