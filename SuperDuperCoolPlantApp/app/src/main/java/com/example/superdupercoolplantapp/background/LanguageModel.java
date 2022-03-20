@@ -6,7 +6,20 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 
 public class LanguageModel {
-    public static String logEngine(String plantName, ArrayList<Emotion> emotions) {
+
+    public static String listEmojis(ArrayList<Emotion> emotions) {
+        StringBuilder emojis = new StringBuilder();
+
+        if (emotions.size() != 0)
+            for (Emotion emotion : emotions) {
+                emojis.append(" ").append(emotion.getEmoji());
+            }
+        else emojis.append(Emotion.HAPPY.getEmoji());
+
+        return emojis.toString();
+    }
+
+    public static String scanResult(String plantName, ArrayList<Emotion> emotions) {
         StringBuilder comments = new StringBuilder();
         int count = 0;
 
@@ -15,22 +28,47 @@ public class LanguageModel {
                 if (count != 0) comments.append("\n");
 
                 if (emotion == Emotion.THIRSTY)
-                    comments.append(Emotion.THIRSTY.getEmoji()).append("\t").append(plantName).append(" is thirsty. We added some water.");
+                    comments.append(plantName).append(" is thirsty.");
                 else if (emotion == Emotion.HUMID)
-                    comments.append(Emotion.HUMID.getEmoji()).append("\t").append(plantName).append(" has too much water. We will slow down with the water.");
+                    comments.append(plantName).append(" has too much water.");
                 else if (emotion == Emotion.COLD)
-                    comments.append(Emotion.COLD.getEmoji()).append("\t").append(plantName).append(" is cold. Please move the plant to a warmer place.");
+                    comments.append(plantName).append(" is cold.");
                 else if (emotion == Emotion.HOT)
-                    comments.append(Emotion.HOT.getEmoji()).append("\t").append(plantName).append(" is hot. Please move the plant to a cooler place.");
+                    comments.append(plantName).append(" is hot.");
                 else if (emotion == Emotion.DARK)
-                    comments.append(Emotion.DARK.getEmoji()).append("\t").append(plantName).append(" is not getting enough light. We will turn up the lights.");
+                    comments.append(plantName).append(" is not getting enough light");
                 else if (emotion == Emotion.LIGHT)
-                    comments.append(Emotion.LIGHT.getEmoji()).append("\t").append(plantName).append(" is getting too much light. We will dim the lights.");
+                    comments.append(plantName).append(" is getting too much light.");
                 count++;
             }
-        else {
-            comments.append(Emotion.HAPPY.getEmoji()).append("\t").append(plantName).append(" is vibing. Maintaining parameters!");
-        }
+        else comments.append(plantName).append(" is vibing.");
+
+        return comments.toString();
+    }
+
+    public static String actionResult(ArrayList<Emotion> emotions) {
+        StringBuilder comments = new StringBuilder();
+        int count = 0;
+
+        if (emotions.size() != 0)
+            for (Emotion emotion : emotions) {
+                if (count != 0) comments.append("\n");
+
+                if (emotion == Emotion.THIRSTY)
+                    comments.append("We added some water.");
+                else if (emotion == Emotion.HUMID)
+                    comments.append("We will slow down with the water.");
+                else if (emotion == Emotion.COLD)
+                    comments.append("Please move the plant to a warmer place.");
+                else if (emotion == Emotion.HOT)
+                    comments.append("Please move the plant to a cooler place.");
+                else if (emotion == Emotion.DARK)
+                    comments.append("We will turn up the lights.");
+                else if (emotion == Emotion.LIGHT)
+                    comments.append("We will dim the lights.");
+                count++;
+            }
+        else comments.append("Maintaining parameters.");
 
         return comments.toString();
     }

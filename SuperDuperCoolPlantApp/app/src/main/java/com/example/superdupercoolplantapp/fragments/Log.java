@@ -19,8 +19,8 @@ import android.view.ViewGroup;
 
 import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.R;
-import com.example.superdupercoolplantapp.adapters.FutureAdapter;
-import com.example.superdupercoolplantapp.adapters.PastAdapter;
+import com.example.superdupercoolplantapp.adapters.ScheduleAdapter;
+import com.example.superdupercoolplantapp.adapters.ScansAdapter;
 import com.example.superdupercoolplantapp.background.models.NextScan;
 import com.example.superdupercoolplantapp.background.models.Reading;
 import com.example.superdupercoolplantapp.background.viewmodels.ViewModelNextScans;
@@ -31,8 +31,8 @@ import java.util.ArrayList;
 public class Log extends Fragment {
     private MainActivity activity;
 
-    private PastAdapter pastAdapter;
-    private FutureAdapter futureAdapter;
+    private ScansAdapter scansAdapter;
+    private ScheduleAdapter scheduleAdapter;
 
     @Nullable
     @Override
@@ -48,31 +48,29 @@ public class Log extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         NavController navController = Navigation.findNavController(view);
 
-        //TODO: create adapters
         RecyclerView future = view.findViewById(R.id.log_future_rec);
         future.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        futureAdapter = new FutureAdapter(navController);
-        future.setAdapter(futureAdapter);
+        scheduleAdapter = new ScheduleAdapter(navController);
+        future.setAdapter(scheduleAdapter);
 
         RecyclerView past = view.findViewById(R.id.log_past_rec);
         past.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        pastAdapter = new PastAdapter(navController);
-        past.setAdapter(pastAdapter);
+        scansAdapter = new ScansAdapter(navController);
+        past.setAdapter(scansAdapter);
 
         ViewModelReadings readings = new ViewModelProvider(activity).get(ViewModelReadings.class);
         readings.getRecentReadings().observe(activity, this::updatePast);
 
         ViewModelNextScans nextScans = new ViewModelProvider(activity).get(ViewModelNextScans.class);
-        nextScans.getNextScans(activity, activity.getAccount().getUserID());
         nextScans.getNextScans().observe(activity, this::updateFuture);
     }
 
     private void updateFuture(ArrayList<NextScan> nextScans) {
-        futureAdapter.update(nextScans);
+        scheduleAdapter.update(nextScans);
     }
 
     private void updatePast(ArrayList<Reading> readings) {
-        pastAdapter.update(readings);
+        scansAdapter.update(readings);
     }
 
     @Override

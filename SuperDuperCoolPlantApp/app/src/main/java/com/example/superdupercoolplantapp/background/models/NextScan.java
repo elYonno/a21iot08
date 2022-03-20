@@ -11,13 +11,13 @@ import java.time.LocalDateTime;
 public class NextScan {
     private final int plantID;
     private final String plantName;
-    private final LocalDateTime nextScan;
+    private final LocalDateTime timestamp;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public NextScan(int plantID, String plantName, String nextScan) {
+    public NextScan(int plantID, String plantName, String timestamp) {
         this.plantID = plantID;
         this.plantName = plantName;
-        this.nextScan = Utilities.stringToTimestamp(nextScan);
+        this.timestamp = Utilities.stringToTimestamp(timestamp);
     }
 
     public int getPlantID() {
@@ -29,7 +29,7 @@ public class NextScan {
         return plantName;
     }
 
-    public LocalDateTime getNextScan() {
-        return nextScan;
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 }

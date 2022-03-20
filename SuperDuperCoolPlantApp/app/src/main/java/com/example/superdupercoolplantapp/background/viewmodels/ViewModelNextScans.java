@@ -14,6 +14,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.background.APIs;
 import com.example.superdupercoolplantapp.background.models.NextScan;
+import com.example.superdupercoolplantapp.background.models.Plant;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,18 +28,19 @@ public class ViewModelNextScans extends ViewModel {
     private final MutableLiveData<ArrayList<NextScan>> nextScans = new MutableLiveData<>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void getNextScans(MainActivity mainActivity, int userID) {
-        String link = APIs.GET_NEXT_SCANS + userID;
+    public void getNextScans(MainActivity mainActivity, Plant plant) {
+        String link = APIs.GET_NEXT_SCANS + plant.getPlantID();
 
         RequestQueue requestQueue = Volley.newRequestQueue(mainActivity);
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, link, null,
-                this::response, error -> Log.e(TAG, "Cannot get next scans: ", error));
+                response -> onResponse(response, plant),
+                error -> Log.e(TAG, "Cannot get next scans: ", error));
 
         requestQueue.add(request);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void response(JSONArray jsonArray) {
+    private void onResponse(JSONArray jsonArray, Plant plant) {
         {
             try {
                 ArrayList<NextScan> newNextScans = new ArrayList<>();
@@ -46,12 +48,12 @@ public class ViewModelNextScans extends ViewModel {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject o = jsonArray.getJSONObject(i);
 
-                    int plantID = o.getInt("plantID");
                     String plantName = o.getString("plantName");
                     String nextScan = o.getString("nextScan");
 
-                    NextScan newScan = new NextScan(plantID, plantName, nextScan);
+                    NextScan newScan = new NextScan(plant.getPlantID(), plantName, nextScan);
                     newNextScans.add(newScan);
+                    plant.setNextScan(newScan);
                 }
 
                 updateNextScans(newNextScans);

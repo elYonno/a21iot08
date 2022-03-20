@@ -9,6 +9,7 @@ public class Plant {
     private int potNumber;
     private String plantName, plantType, image;
     private final ArrayList<Reading> recentReadings;
+    private NextScan nextScan;
     private Emotion emotion;
 
     public Plant(int plantID, int potNumber, String plantName, String plantType, String image) {
@@ -18,6 +19,7 @@ public class Plant {
         this.plantType = plantType;
         this.image = image;
         this.recentReadings = new ArrayList<>();
+        this.nextScan = null;
         this.emotion = Emotion.HAPPY;
     }
 
@@ -78,5 +80,13 @@ public class Plant {
     public Reading getMostRecentReading() {
         if (recentReadings.size() != 0) return recentReadings.get(0);
         else return null;
+    }
+
+    public NextScan getNextScan() {
+        return nextScan;
+    }
+
+    public void setNextScan(NextScan nextScan) {
+        this.nextScan = nextScan;
     }
 }

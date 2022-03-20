@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.background.viewmodels.ViewModelAccount;
 import com.example.superdupercoolplantapp.background.viewmodels.ViewModelMyPlants;
+import com.example.superdupercoolplantapp.background.viewmodels.ViewModelNextScans;
 import com.example.superdupercoolplantapp.background.viewmodels.ViewModelReadings;
 import com.example.superdupercoolplantapp.background.models.AccountModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewModelAccount viewModelAccount;
     private ViewModelReadings viewModelReadings;
     private ViewModelMyPlants viewModelMyPlants;
+    private ViewModelNextScans viewModelNextScans;
 
     private AccountModel loggedInAccount;
 
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         viewModelAccount.getLoggedInAccount().observe(this, this::updateAccount);
 
         viewModelReadings = new ViewModelProvider(this).get(ViewModelReadings.class);
+        viewModelNextScans = new ViewModelProvider(this).get(ViewModelNextScans.class);
 
         viewModelMyPlants = new ViewModelProvider(this).get(ViewModelMyPlants.class);
         viewModelMyPlants.getPlants().observe(this, this::updatePlant);
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private void updatePlant(ArrayList<Plant> plants) {
         for (Plant plant : plants) {
             viewModelReadings.queryRecentReadings(this, plant);
+            viewModelNextScans.getNextScans(this, plant);
         }
     }
 

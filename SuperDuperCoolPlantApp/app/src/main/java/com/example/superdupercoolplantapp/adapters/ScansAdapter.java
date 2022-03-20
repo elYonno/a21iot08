@@ -21,11 +21,11 @@ import com.example.superdupercoolplantapp.fragments.LogDirections;
 
 import java.util.ArrayList;
 
-public class PastAdapter extends RecyclerView.Adapter<PastAdapter.ViewHolder> {
+public class ScansAdapter extends RecyclerView.Adapter<ScansAdapter.ViewHolder> {
     private ArrayList<Reading> readings;
     private final NavController navController;
 
-    public PastAdapter(NavController navController) {
+    public ScansAdapter(NavController navController) {
         this.navController = navController;
     }
 
@@ -47,17 +47,18 @@ public class PastAdapter extends RecyclerView.Adapter<PastAdapter.ViewHolder> {
         Reading reading = readings.get(position);
         ArrayList<Emotion> emotions = reading.getEmotions();
 
-        if (emotions.size() > 1) // angry
-            holder.name.setText(String.format("%s\t%s", reading.getPlantName(), Emotion.ANGRY.getEmoji()));
-        else // everything else
-            holder.name.setText(reading.getPlantName());
+        holder.name.setText(String.format("%s\t%s",
+                reading.getPlantName(), LanguageModel.listEmojis(emotions)));
 
         holder.time.setText(Utilities.getHowLongAgo(reading.getTimestamp()));
 
-        holder.comment.setText(LanguageModel.logEngine(reading.getPlantName(), reading.getEmotions()));
+        holder.comment.setText(String.format("%s\n\n%s",
+                LanguageModel.scanResult(reading.getPlantName(), reading.getEmotions()),
+                LanguageModel.actionResult(reading.getEmotions())));
 
         holder.cardView.setOnClickListener(view -> {
-            LogDirections.ActionLogToPlantDetail action = LogDirections.actionLogToPlantDetail(reading.getPlantID());
+            LogDirections.ActionLogToPlantDetail action =
+                    LogDirections.actionLogToPlantDetail(reading.getPlantID());
             navController.navigate(action);
         });
     }

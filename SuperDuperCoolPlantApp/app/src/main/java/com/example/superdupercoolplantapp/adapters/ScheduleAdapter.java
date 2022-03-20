@@ -15,14 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.superdupercoolplantapp.R;
 import com.example.superdupercoolplantapp.background.Utilities;
 import com.example.superdupercoolplantapp.background.models.NextScan;
+import com.example.superdupercoolplantapp.fragments.LogDirections;
 
 import java.util.ArrayList;
 
-public class FutureAdapter extends RecyclerView.Adapter<FutureAdapter.ViewHolder> {
+public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder> {
     private ArrayList<NextScan> nextScans;
     private final NavController navController;
 
-    public FutureAdapter(NavController navController) {
+    public ScheduleAdapter(NavController navController) {
         this.navController = navController;
     }
 
@@ -44,10 +45,12 @@ public class FutureAdapter extends RecyclerView.Adapter<FutureAdapter.ViewHolder
         NextScan nextScan = nextScans.get(position);
 
         holder.plantName.setText(nextScan.getPlantName());
-        holder.time.setText(Utilities.getInHowLong(nextScan.getNextScan()));
+        holder.time.setText(Utilities.getInHowLong(nextScan.getTimestamp()));
 
         holder.card.setOnClickListener(view -> {
-            // TODO go to plant
+            LogDirections.ActionLogToPlantDetail action =
+                    LogDirections.actionLogToPlantDetail(nextScan.getPlantID());
+            navController.navigate(action);
         });
     }
 

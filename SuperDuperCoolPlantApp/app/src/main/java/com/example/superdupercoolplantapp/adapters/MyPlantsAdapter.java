@@ -12,11 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.superdupercoolplantapp.R;
 import com.example.superdupercoolplantapp.background.models.Plant;
+import com.example.superdupercoolplantapp.fragments.MyPlantsDirections;
 
 import java.util.ArrayList;
 
 public class MyPlantsAdapter extends RecyclerView.Adapter<MyPlantsAdapter.ViewHolder> {
-    private NavController navController;
+    private final NavController navController;
     private ArrayList<Plant> plants;
 
     public MyPlantsAdapter(NavController navController) {
@@ -44,7 +45,9 @@ public class MyPlantsAdapter extends RecyclerView.Adapter<MyPlantsAdapter.ViewHo
         holder.plantType.setText(plant.getPlantType());
 
         holder.layout.setOnClickListener(view -> {
-            // TODO navigate to plant page
+            MyPlantsDirections.ActionMyPlantsToPlantDetail action =
+                    MyPlantsDirections.actionMyPlantsToPlantDetail(plant.getPlantID());
+            navController.navigate(action);
         });
     }
 
