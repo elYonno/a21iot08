@@ -3,6 +3,7 @@ package com.example.superdupercoolplantapp.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.superdupercoolplantapp.R;
+import com.example.superdupercoolplantapp.background.Base64Tool;
 import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.fragments.MyPlantsDirections;
 
@@ -40,9 +42,13 @@ public class MyPlantsAdapter extends RecyclerView.Adapter<MyPlantsAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Plant plant = plants.get(position);
 
-        String title = String.format("%s %s", plant.getEmotion().getEmoji(), plant.getPlantName());
-        holder.plantName.setText(title);
+        if (position == 0)
+            holder.divider.setVisibility(View.GONE);
+
+        holder.plantName.setText(plant.getPlantName());
         holder.plantType.setText(plant.getPlantType());
+        holder.emoji.setText(plant.getEmotion().getEmoji());
+        holder.profilePic.setImageBitmap(Base64Tool.decodeImage(plant.getImage()));
 
         holder.layout.setOnClickListener(view -> {
             MyPlantsDirections.ActionMyPlantsToPlantDetail action =
@@ -58,14 +64,19 @@ public class MyPlantsAdapter extends RecyclerView.Adapter<MyPlantsAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView plantName, plantType;
+        private final View divider;
+        private final TextView plantName, plantType, emoji;
         private final ConstraintLayout layout;
+        private final ImageView profilePic;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            divider = itemView.findViewById(R.id.rec_view_my_plants_divider);
             plantName = itemView.findViewById(R.id.rec_view_my_plants_name);
             plantType = itemView.findViewById(R.id.rec_view_my_plants_type);
+            emoji = itemView.findViewById(R.id.rec_view_my_plants_emoji);
             layout = itemView.findViewById(R.id.rec_view_my_plants_layout);
+            profilePic = itemView.findViewById(R.id.rec_view_my_plants_image);
         }
     }
 }

@@ -4,38 +4,66 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rec_view_my_plants_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingBottom="16dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/rec_view_my_plants_image_holder"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:cardCornerRadius="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/rec_view_my_plants_type"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rec_view_my_plants_name">
+
+        <ImageView
+            android:id="@+id/rec_view_my_plants_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/profile_picture"
+            app:layout_constraintBottom_toTopOf="@+id/rec_view_chat_name"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:srcCompat="@mipmap/ic_flora_bot" />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/rec_view_my_plants_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="TextView"
+        android:text="Uvuvwevwevwe Onyetenyevwe Ugwemubwem Ossas"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/rec_view_my_plants_emoji"
+        app:layout_constraintStart_toEndOf="@+id/rec_view_my_plants_image_holder"
+        app:layout_constraintTop_toBottomOf="@+id/rec_view_my_plants_divider" />
 
     <TextView
         android:id="@+id/rec_view_my_plants_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:text="TextView"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/rec_view_my_plants_name"
+        app:layout_constraintStart_toStartOf="@+id/rec_view_my_plants_name"
+        app:layout_constraintTop_toBottomOf="@+id/rec_view_my_plants_name" />
+
+    <TextView
+        android:id="@+id/rec_view_my_plants_emoji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/rec_view_my_plants_type"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/rec_view_my_plants_name" />
 
     <View
-        android:id="@+id/divider2"
-        android:layout_width="0dp"
+        android:id="@+id/rec_view_my_plants_divider"
+        android:layout_width="409dp"
         android:layout_height="1dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="1dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rec_view_my_plants_name" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
