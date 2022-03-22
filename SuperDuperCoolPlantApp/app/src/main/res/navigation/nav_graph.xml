@@ -50,7 +50,7 @@
     </fragment>
     <fragment
         android:id="@+id/newPlant"
-        android:name="com.example.superdupercoolplantapp.fragments.NewPlant"
+        android:name="com.example.superdupercoolplantapp.fragments.newplant.NewPlant"
         android:label="fragment_new_plant"
         tools:layout="@layout/fragment_new_plant" >
         <argument
@@ -59,7 +59,7 @@
     </fragment>
     <fragment
         android:id="@+id/plantDetail"
-        android:name="com.example.superdupercoolplantapp.fragments.PlantDetail"
+        android:name="com.example.superdupercoolplantapp.fragments.plantdetails.PlantDetail"
         android:label="fragment_plant_detail"
         tools:layout="@layout/fragment_plant_detail" >
         <argument

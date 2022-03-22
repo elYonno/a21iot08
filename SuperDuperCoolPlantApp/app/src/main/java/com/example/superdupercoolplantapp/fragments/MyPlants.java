@@ -21,7 +21,7 @@ import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.R;
 import com.example.superdupercoolplantapp.adapters.MyPlantsAdapter;
 import com.example.superdupercoolplantapp.background.models.Plant;
-import com.example.superdupercoolplantapp.background.viewmodels.ViewModelMyPlants;
+import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelMyPlants;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;

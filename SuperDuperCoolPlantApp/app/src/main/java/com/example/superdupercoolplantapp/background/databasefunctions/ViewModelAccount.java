@@ -1,11 +1,10 @@
-package com.example.superdupercoolplantapp.background.viewmodels;
+package com.example.superdupercoolplantapp.background.databasefunctions;
 
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;

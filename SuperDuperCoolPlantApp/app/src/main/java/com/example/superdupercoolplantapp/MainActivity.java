@@ -13,10 +13,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.superdupercoolplantapp.background.models.Plant;
-import com.example.superdupercoolplantapp.background.viewmodels.ViewModelAccount;
-import com.example.superdupercoolplantapp.background.viewmodels.ViewModelMyPlants;
-import com.example.superdupercoolplantapp.background.viewmodels.ViewModelNextScans;
-import com.example.superdupercoolplantapp.background.viewmodels.ViewModelReadings;
+import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelAccount;
+import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelMyPlants;
+import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelNextScans;
+import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelReadings;
 import com.example.superdupercoolplantapp.background.models.AccountModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

@@ -1,6 +1,6 @@
 package com.example.superdupercoolplantapp.background;
 
-import com.example.superdupercoolplantapp.background.viewmodels.CommonStorage;
+import com.example.superdupercoolplantapp.background.databasefunctions.CommonStorage;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;

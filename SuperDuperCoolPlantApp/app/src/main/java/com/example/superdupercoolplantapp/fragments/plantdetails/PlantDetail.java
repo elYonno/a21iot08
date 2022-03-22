@@ -1,4 +1,4 @@
-package com.example.superdupercoolplantapp.fragments;
+package com.example.superdupercoolplantapp.fragments.plantdetails;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -27,7 +27,7 @@ import com.example.superdupercoolplantapp.background.LanguageModel;
 import com.example.superdupercoolplantapp.background.Utilities;
 import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.background.models.Reading;
-import com.example.superdupercoolplantapp.background.viewmodels.ViewModelMyPlants;
+import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelMyPlants;
 
 public class PlantDetail extends Fragment {
     private ImageView profilePicture;
@@ -63,7 +63,16 @@ public class PlantDetail extends Fragment {
         expand = view.findViewById(R.id.plant_detail_expand);
         expand.setOnClickListener(this::onExpandClicked);
 
+        Button edit = view.findViewById(R.id.plant_detail_edit);
+        edit.setOnClickListener(this::onEditClicked);
+
         return view;
+    }
+
+    private void onEditClicked(View view) {
+        PlantDetailDirections.ActionPlantDetailToNewPlant action =
+                PlantDetailDirections.actionPlantDetailToNewPlant(plant.getPlantID());
+        navController.navigate(action);
     }
 
     private void onExpandClicked(View view) {

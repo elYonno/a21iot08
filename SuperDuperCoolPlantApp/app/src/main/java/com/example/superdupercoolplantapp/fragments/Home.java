@@ -17,8 +17,8 @@ import com.example.superdupercoolplantapp.R;
 import com.example.superdupercoolplantapp.adapters.ChatAdapter;
 import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.background.models.Reading;
-import com.example.superdupercoolplantapp.background.viewmodels.ViewModelMyPlants;
-import com.example.superdupercoolplantapp.background.viewmodels.ViewModelReadings;
+import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelMyPlants;
+import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelReadings;
 
 import java.util.ArrayList;
 

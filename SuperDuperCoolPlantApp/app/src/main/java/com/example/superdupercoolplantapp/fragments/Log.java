@@ -23,8 +23,8 @@ import com.example.superdupercoolplantapp.adapters.ScheduleAdapter;
 import com.example.superdupercoolplantapp.adapters.ScansAdapter;
 import com.example.superdupercoolplantapp.background.models.NextScan;
 import com.example.superdupercoolplantapp.background.models.Reading;
-import com.example.superdupercoolplantapp.background.viewmodels.ViewModelNextScans;
-import com.example.superdupercoolplantapp.background.viewmodels.ViewModelReadings;
+import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelNextScans;
+import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelReadings;
 
 import java.util.ArrayList;
 

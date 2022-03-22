@@ -1,4 +1,4 @@
-package com.example.superdupercoolplantapp.background.viewmodels;
+package com.example.superdupercoolplantapp.background.databasefunctions;
 
 import android.os.Build;
 import android.util.Log;
@@ -21,7 +21,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Optional;
 
 public class ViewModelMyPlants extends ViewModel {
     public static final String TAG = "ViewModelMyPlants";

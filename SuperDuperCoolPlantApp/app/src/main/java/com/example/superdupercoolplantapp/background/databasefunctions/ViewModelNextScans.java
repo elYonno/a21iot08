@@ -1,4 +1,4 @@
-package com.example.superdupercoolplantapp.background.viewmodels;
+package com.example.superdupercoolplantapp.background.databasefunctions;
 
 import android.os.Build;
 import android.util.Log;

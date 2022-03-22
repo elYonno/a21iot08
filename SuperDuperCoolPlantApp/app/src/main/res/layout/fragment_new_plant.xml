@@ -5,7 +5,7 @@
     android:id="@+id/ConstraintPlant"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.NewPlant" >
+    tools:context=".fragments.newplant.NewPlant" >
 
     <Button
         android:id="@+id/new_plant_add"

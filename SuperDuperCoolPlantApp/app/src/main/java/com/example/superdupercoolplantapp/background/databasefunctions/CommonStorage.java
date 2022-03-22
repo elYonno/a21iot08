@@ -1,8 +1,4 @@
-package com.example.superdupercoolplantapp.background.viewmodels;
-
-import com.example.superdupercoolplantapp.background.models.Reading;
-
-import java.util.ArrayList;
+package com.example.superdupercoolplantapp.background.databasefunctions;
 
 public enum CommonStorage {
     INSTANCE;
