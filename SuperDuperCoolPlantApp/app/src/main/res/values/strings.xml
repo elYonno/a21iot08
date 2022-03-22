@@ -36,4 +36,6 @@
     <string name="logo">Logo</string>
     <string name="profile_picture">Profile picture</string>
     <string name="scan_now">Scan Now</string>
+    <string name="new_plant_warning">We don\'t have this plant in our database. Please insert the parameters yourself and we will add it to the database for future use.</string>
+    <string name="smart_pot_does_not_exist">The pot number you inserted does not exist in our database. Please put another number.</string>
 </resources>

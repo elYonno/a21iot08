@@ -1,4 +1,4 @@
-package com.example.superdupercoolplantapp.fragments.plantdetails;
+package com.example.superdupercoolplantapp.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
