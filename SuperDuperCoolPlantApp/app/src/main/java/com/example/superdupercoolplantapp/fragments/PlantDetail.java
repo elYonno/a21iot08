@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -32,11 +33,14 @@ public class PlantDetail extends Fragment {
     private ImageView profilePicture;
     private TextView type, potNumber, lastScan, emojis, nextScan, scanResults, lastAction;
     private Button expand;
+    private MotionLayout motionLayout;
 
     private MainActivity activity;
     private ViewModelMyPlants viewModel;
     private NavController navController;
     private Plant plant;
+
+    private boolean seeButtons;
 
     @Nullable
     @Override
@@ -44,6 +48,9 @@ public class PlantDetail extends Fragment {
         View view = inflater.inflate(R.layout.fragment_plant_detail, container, false);
 
         activity = (MainActivity) requireActivity();
+        seeButtons = false;
+
+        motionLayout = view.findViewById(R.id.plant_detail_motion_layout);
 
         profilePicture = view.findViewById(R.id.plant_detail_image);
         type = view.findViewById(R.id.plant_detail_type);
@@ -54,8 +61,19 @@ public class PlantDetail extends Fragment {
         scanResults = view.findViewById(R.id.plant_detail_scan_results);
         lastAction = view.findViewById(R.id.plant_detail_scan_action);
         expand = view.findViewById(R.id.plant_detail_expand);
+        expand.setOnClickListener(this::onExpandClicked);
 
         return view;
+    }
+
+    private void onExpandClicked(View view) {
+        if (seeButtons) {
+            seeButtons = false;
+            motionLayout.transitionToStart();
+        } else {
+            seeButtons = true;
+            motionLayout.transitionToEnd();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
