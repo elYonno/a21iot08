@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/rec_view_my_plants_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:contentDescription="@string/profile_picture"
             app:layout_constraintBottom_toTopOf="@+id/rec_view_chat_name"
             app:layout_constraintEnd_toStartOf="@+id/linearLayout"
