@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.PlantDetail" >
+    app:layoutDescription="@xml/fragment_plant_detail_scene"
+    tools:context=".fragments.PlantDetail">
 
     <ImageView
         android:id="@+id/plant_detail_image"
@@ -21,7 +22,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
+        app:layout_constraintBottom_toTopOf="@+id/plant_detail_button_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -221,7 +222,7 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
+        android:id="@+id/plant_detail_button_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="1dp"
@@ -342,4 +343,4 @@
             app:layout_constraintTop_toBottomOf="@+id/plant_detail_delete" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
