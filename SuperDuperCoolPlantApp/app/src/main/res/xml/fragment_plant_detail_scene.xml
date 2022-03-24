@@ -55,8 +55,8 @@
         <Constraint
             android:id="@+id/plant_detail_image_holder"
             motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="16dp" />
