@@ -89,4 +89,27 @@
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="1dp" />
     </ConstraintSet>
+    <ConstraintSet
+        android:id="@+id/scroll_down"
+        motion:deriveConstraintsFrom="@+id/start" >
+        <Constraint
+            android:id="@+id/plant_detail_image_holder"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="16dp" />
+    </ConstraintSet>
+    <Transition
+        android:id="@+id/transition_scroll_up"
+        motion:constraintSetStart="@+id/start"
+        motion:constraintSetEnd="@+id/scroll_down" >
+    </Transition>
+    <Transition
+        android:id="@+id/transition_scroll_down"
+        motion:constraintSetStart="@+id/scroll_down"
+        motion:constraintSetEnd="@+id/start" >
+        <OnSwipe />
+    </Transition>
 </MotionScene>

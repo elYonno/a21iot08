@@ -15,8 +15,10 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +44,7 @@ public class PlantDetail extends Fragment {
 
     private boolean seeButtons;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,6 +65,9 @@ public class PlantDetail extends Fragment {
         lastAction = view.findViewById(R.id.plant_detail_scan_action);
         expand = view.findViewById(R.id.plant_detail_expand);
         expand.setOnClickListener(this::onExpandClicked);
+
+        ScrollView scrollView = view.findViewById(R.id.plant_detail_scroll);
+        scrollView.setOnScrollChangeListener(this::onScrollChange);
 
         Button edit = view.findViewById(R.id.plant_detail_edit);
         edit.setOnClickListener(this::onEditClicked);
@@ -130,5 +136,11 @@ public class PlantDetail extends Fragment {
         nextScan.setText((plant.getNextScan() != null)?
                 Utilities.getInHowLong(plant.getNextScan().getTimestamp())
                 : "N/A");
+    }
+
+    private void onScrollChange(View scroll, int w, int h, int oldW, int oldH) {
+        // scroll down
+        if (h > oldH) motionLayout.transitionToState(R.id.transition_scroll_down);
+        else motionLayout.transitionToStart();
     }
 }
