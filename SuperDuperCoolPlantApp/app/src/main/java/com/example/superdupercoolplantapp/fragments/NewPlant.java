@@ -1,8 +1,15 @@
 package com.example.superdupercoolplantapp.fragments;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -11,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +41,9 @@ import com.example.superdupercoolplantapp.background.databasefunctions.ViewModel
 import java.util.ArrayList;
 public class NewPlant extends Fragment {
 
+    private ActivityResultLauncher<Intent> cameraLauncher;
+    private ActivityResultLauncher<Intent> storageLauncher;
+
     private MainActivity activity;
     private NavController navController;
     private ViewModelMyPlants viewModelMyPlants;
@@ -42,10 +53,46 @@ public class NewPlant extends Fragment {
     private TextView newTypeMessage, potNumberError;
     private AutoCompleteTextView plantType;
     private ImageView camera;
+    private Button confirm;
 
     private Plant plant;
     private Parameter parameter;
     private boolean editMode;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        cameraLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        if (result.getData() != null) {
+                            Bundle extras = result.getData().getExtras();
+                            Bitmap bitmap = (Bitmap) extras.get("data");
+                            camera.setImageBitmap(bitmap);
+                        } else
+                            Toast.makeText(activity, "Unable to get image.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(activity, "Unable to start camera.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        storageLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        if (result.getData() != null) {
+                            Uri image = result.getData().getData();
+                            camera.setImageURI(image);
+                        } else
+                            Toast.makeText(activity, "Unable to get image.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(activity, "Unable to start gallery.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
 
     @Nullable
     @Override
@@ -65,7 +112,7 @@ public class NewPlant extends Fragment {
         camera = view.findViewById(R.id.new_plant_image);
         camera.setOnClickListener(this::camera_onClick);
 
-        Button confirm = view.findViewById(R.id.new_plant_add);
+        confirm = view.findViewById(R.id.new_plant_add);
         confirm.setOnClickListener(this::confirm_onClick);
 
         return view;
@@ -91,12 +138,10 @@ public class NewPlant extends Fragment {
         if (plantId != -1) {
             editMode = true;
             activity.setText(String.valueOf(getResources().getText(R.string.edit_plant)));
+            confirm.setText(getResources().getText(R.string.edit_plant));
             plant = viewModelMyPlants.getPlantByID(plantId);
             populateFields();
-        } else {
-            editMode = false;
-            activity.setText(String.valueOf(getResources().getText(R.string.new_plant)));
-        }
+        } else editMode = false;
 
         activity.hideBottomNav();
     }
@@ -128,7 +173,21 @@ public class NewPlant extends Fragment {
     }
 
     private void camera_onClick(View view) {
-
+         AlertDialog dialog = new AlertDialog.Builder(activity)
+                .setTitle("Choose image")
+                .setPositiveButton("Camera", (dialogInterface, i) -> {
+                    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    cameraLauncher.launch(takePicture);
+                })
+                .setNegativeButton("Storage", (dialogInterface, i) -> {
+                    Intent getPicture = new Intent(Intent.ACTION_PICK);
+                    getPicture.setType("image/*");
+                    storageLauncher.launch(getPicture);
+                })
+                .setNeutralButton("Cancel", (dialogInterface, i) ->
+                        dialogInterface.dismiss())
+                 .create();
+         dialog.show();
     }
 
     private void populateFields() {
