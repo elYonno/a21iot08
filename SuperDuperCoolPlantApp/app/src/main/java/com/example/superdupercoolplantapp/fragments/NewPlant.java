@@ -1,5 +1,6 @@
 package com.example.superdupercoolplantapp.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -38,6 +39,7 @@ import com.example.superdupercoolplantapp.background.models.Parameter;
 import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelMyPlants;
 
+import java.io.IOException;
 import java.util.ArrayList;
 public class NewPlant extends Fragment {
 
@@ -58,6 +60,8 @@ public class NewPlant extends Fragment {
     private Plant plant;
     private Parameter parameter;
     private boolean editMode;
+    private boolean ready;
+    private Bitmap profilePicture;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +74,7 @@ public class NewPlant extends Fragment {
                             Bundle extras = result.getData().getExtras();
                             Bitmap bitmap = (Bitmap) extras.get("data");
                             camera.setImageBitmap(bitmap);
+                            profilePicture = bitmap;
                         } else
                             Toast.makeText(activity, "Unable to get image.", Toast.LENGTH_SHORT).show();
                     } else {
@@ -85,6 +90,11 @@ public class NewPlant extends Fragment {
                         if (result.getData() != null) {
                             Uri image = result.getData().getData();
                             camera.setImageURI(image);
+                            try {
+                                profilePicture = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), image);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         } else
                             Toast.makeText(activity, "Unable to get image.", Toast.LENGTH_SHORT).show();
                     } else {
@@ -99,6 +109,7 @@ public class NewPlant extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_plant, container, false);
         activity = (MainActivity) requireActivity();
+        ready = false;
 
         plantName = view.findViewById(R.id.new_plant_name);
         plantType = view.findViewById(R.id.new_plant_type);
@@ -130,6 +141,7 @@ public class NewPlant extends Fragment {
         viewModelNewPlant.queryParameters(activity);
         viewModelNewPlant.queryPotNumbers(activity);
         viewModelNewPlant.getParameters().observe(activity, this::onParametersChange);
+        viewModelNewPlant.getInsertSuccess().observe(activity, this::parameterInsertSuccess);
 
         plantType.setOnFocusChangeListener(this::onPlantTypeChange);
         potNumber.setOnFocusChangeListener(this::onPotNumberChange);
@@ -169,11 +181,56 @@ public class NewPlant extends Fragment {
     }
 
     private void confirm_onClick(View view) {
-        navController.popBackStack();
+        if (validInput()) {
+            ready = true;
+
+            if (parameter == null) { // create new plant parameter
+                String genusName = plantType.getText().toString();
+                double doubleTemp = Double.parseDouble(plantTemperature.getText().toString());
+                double doubleHumidity = Double.parseDouble(plantHumidity.getText().toString());
+                double doubleLight = Double.parseDouble(plantLight.getText().toString());
+
+                parameter = new Parameter(-1, genusName, doubleLight, doubleHumidity, doubleTemp);
+                viewModelNewPlant.insertParameter(activity, parameter);
+            } else parameterInsertSuccess(true);
+        }
+    }
+
+    private void parameterInsertSuccess(Boolean result) {
+        if (ready)
+            if (result) {
+                if (!editMode) {
+                    String stringName = plantName.getText().toString();
+                    String stringGenus = plantType.getText().toString();
+                    int intPotNumber = Integer.parseInt(potNumber.getText().toString());
+                    String image = null;
+                    if (profilePicture != null) image = Base64Tool.encodeImage(profilePicture);
+
+                    viewModelMyPlants.insertPlant(activity, stringName, stringGenus, intPotNumber,
+                            activity.getAccount().getUserID(), image);
+                    navController.popBackStack();
+                }
+            } else Toast.makeText(activity, "Failure inserting a new plant type.", Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean validInput() {
+        if (plantName.getText().toString().equals("") ||
+                plantType.getText().toString().equals("") ||
+                potNumber.getText().toString().equals("") ||
+                plantTemperature.getText().toString().equals("") ||
+                plantHumidity.getText().toString().equals("") ||
+                plantLight.getText().toString().equals("")) {
+            Toast.makeText(activity, "Please fill in all forms.", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (potNumberError.getVisibility() == View.VISIBLE) {
+            Toast.makeText(activity, "Please give a valid SmartPot number.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else return true;
     }
 
     private void camera_onClick(View view) {
-         AlertDialog dialog = new AlertDialog.Builder(activity)
+         @SuppressLint("UseCompatLoadingForDrawables") AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setTitle("Choose image")
                 .setPositiveButton("Camera", (dialogInterface, i) -> {
                     Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -184,8 +241,11 @@ public class NewPlant extends Fragment {
                     getPicture.setType("image/*");
                     storageLauncher.launch(getPicture);
                 })
-                .setNeutralButton("Cancel", (dialogInterface, i) ->
-                        dialogInterface.dismiss())
+                .setNeutralButton("Remove", (dialogInterface, i) -> {
+                    profilePicture = null;
+                    camera.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera));
+                    dialogInterface.dismiss();
+                })
                  .create();
          dialog.show();
     }

@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.background.APIs;
@@ -20,11 +21,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class ViewModelNewPlant extends ViewModel {
     public static final String TAG = "ViewModelNewPlant";
 
+    /**
+     * GET PARAMETERS
+     */
     private final MutableLiveData<ArrayList<Parameter>> parameters = new MutableLiveData<>();
 
     public void queryParameters(MainActivity mainActivity) {
@@ -73,6 +79,9 @@ public class ViewModelNewPlant extends ViewModel {
                 .orElse(null);
     }
 
+    /**
+     * POT NUMBERS
+     */
     private ArrayList<Integer> smartPotNumbers;
 
     public void queryPotNumbers(MainActivity mainActivity) {
@@ -97,5 +106,43 @@ public class ViewModelNewPlant extends ViewModel {
 
     public boolean checkPotNumberExists(int pot) {
         return smartPotNumbers.contains(pot);
+    }
+
+    /**
+     * NEW PARAMETER
+     */
+    private final MutableLiveData<Boolean> insertSuccess = new MutableLiveData<>(false);
+
+    public void insertParameter(MainActivity mainActivity, Parameter parameter) {
+        RequestQueue requestQueue = Volley.newRequestQueue(mainActivity);
+        StringRequest request = new StringRequest(Request.Method.POST,
+                APIs.INSERT_PLANT_PARAMETER,
+                result -> onInsertParameterResult(parameter),
+                error -> {
+                    Log.e(TAG, "Error inserting new parameter: ", error);
+                    insertSuccess.setValue(false);
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> param = new HashMap<>();
+
+                param.put("genus", parameter.getPlantGenus());
+                param.put("light", String.valueOf(parameter.getLight()));
+                param.put("humid", String.valueOf(parameter.getHumidity()));
+                param.put("temp", String.valueOf(parameter.getTemp()));
+
+                return param;
+            }
+        };
+        requestQueue.add(request);
+    }
+
+    private void onInsertParameterResult(Parameter parameter) {
+        Objects.requireNonNull(parameters.getValue()).add(parameter);
+        insertSuccess.setValue(true);
+    }
+
+    public MutableLiveData<Boolean> getInsertSuccess() {
+        return insertSuccess;
     }
 }
