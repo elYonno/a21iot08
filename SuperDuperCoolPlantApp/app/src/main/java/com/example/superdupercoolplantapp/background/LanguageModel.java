@@ -85,15 +85,17 @@ public class LanguageModel {
     }
 
     public static String botResponseEngine(Emotion emotion, String plantName) {
+        String userName = "<font color='#0099ff'>@" + CommonStorage.INSTANCE.getUserRealName() + "</font>";
+
         if (emotion == Emotion.HAPPY) return "That's great to hear! I'll try to maintain the current conditions!";
         else if (emotion == Emotion.THIRSTY) return "I'll add some water!";
         else if (emotion == Emotion.HUMID) return "I'll slow down with the water!";
         else if (emotion == Emotion.COLD) return
                 MessageFormat.format("Hey, {0}! can you please move {1} to somewhere warmer?",
-                        CommonStorage.INSTANCE.getUserRealName(), plantName);
+                        userName, plantName);
         else if (emotion == Emotion.HOT) return
                 MessageFormat.format("Hey, {0}! can you please move {1} to somewhere cooler?",
-                        CommonStorage.INSTANCE.getUserRealName(), plantName);
+                        userName, plantName);
         else if (emotion == Emotion.DARK) return "I'll make the lights brighter!";
         else if (emotion == Emotion.LIGHT) return "I'll dim the lights!";
         return null;

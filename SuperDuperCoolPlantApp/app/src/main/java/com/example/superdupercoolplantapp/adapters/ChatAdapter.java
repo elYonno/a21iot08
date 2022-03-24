@@ -2,6 +2,7 @@ package com.example.superdupercoolplantapp.adapters;
 
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,7 +78,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             });
         }
 
-        holder.chat.setText(chat.getMessage());
+        holder.chat.setText(Html.fromHtml(chat.getMessage()));
         holder.time.setText(Utilities.getFormattedTime(chat.getReading().getTimestamp()));
     }
 
