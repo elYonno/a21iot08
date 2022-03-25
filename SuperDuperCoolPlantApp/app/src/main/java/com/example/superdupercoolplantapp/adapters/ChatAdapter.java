@@ -1,8 +1,7 @@
 package com.example.superdupercoolplantapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.os.Build;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.text.HtmlCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +35,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         this.activity = activity;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setPlants(ArrayList<Plant> plants) {
         chats = new ArrayList<>();
 
@@ -56,7 +56,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.rec_view_chat, parent, false));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Chat chat = chats.get(position);
@@ -78,7 +77,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             });
         }
 
-        holder.chat.setText(Html.fromHtml(chat.getMessage()));
+        holder.chat.setText(HtmlCompat.fromHtml(chat.getMessage(), HtmlCompat.FROM_HTML_MODE_LEGACY));
         holder.time.setText(Utilities.getFormattedTime(chat.getReading().getTimestamp()));
     }
 

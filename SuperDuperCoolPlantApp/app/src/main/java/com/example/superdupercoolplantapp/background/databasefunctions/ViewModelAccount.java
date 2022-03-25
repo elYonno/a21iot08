@@ -1,15 +1,12 @@
 package com.example.superdupercoolplantapp.background.databasefunctions;
 
-import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -30,7 +27,6 @@ public class ViewModelAccount extends ViewModel {
 
     private final MutableLiveData<AccountModel> loggedInAccount = new MutableLiveData<>();
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void logIn(MainActivity mainActivity, String username, String password) {
         String logIn = APIs.LOG_IN + username + "/" + password;
 
@@ -67,7 +63,7 @@ public class ViewModelAccount extends ViewModel {
                 }) {
                     @NonNull
                     @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
+                    protected Map<String, String> getParams() {
                         Map<String, String> params = new HashMap<>();
                         params.put("namereal", user.getRealName());
                         params.put("phone", user.getPhoneNumber());

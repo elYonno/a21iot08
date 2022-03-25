@@ -1,14 +1,12 @@
 package com.example.superdupercoolplantapp.adapters;
 
-import android.os.Build;
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,21 +15,28 @@ import com.example.superdupercoolplantapp.R;
 import com.example.superdupercoolplantapp.background.Emotion;
 import com.example.superdupercoolplantapp.background.LanguageModel;
 import com.example.superdupercoolplantapp.background.Utilities;
+import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.background.models.Reading;
 import com.example.superdupercoolplantapp.fragments.LogDirections;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
-public class ScansAdapter extends RecyclerView.Adapter<ScansAdapter.ViewHolder> {
+public class ReadingsAdapter extends RecyclerView.Adapter<ReadingsAdapter.ViewHolder> {
     private ArrayList<Reading> readings;
     private final NavController navController;
 
-    public ScansAdapter(NavController navController) {
+    public ReadingsAdapter(NavController navController) {
         this.navController = navController;
     }
 
-    public void update(ArrayList<Reading> readings) {
-        this.readings = readings;
+    @SuppressLint("NotifyDataSetChanged")
+    public void update(ArrayList<Plant> plants) {
+        this.readings = plants.stream()
+                .flatMap(Plant::getRecentReadingsStream)
+                .sorted(Comparator.comparing(Reading::getTimestamp).reversed())
+                .collect(Collectors.toCollection(ArrayList::new));
         notifyDataSetChanged();
     }
 
@@ -42,7 +47,6 @@ public class ScansAdapter extends RecyclerView.Adapter<ScansAdapter.ViewHolder> 
         return new ViewHolder(card);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Reading reading = readings.get(position);

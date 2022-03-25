@@ -1,15 +1,10 @@
 package com.example.superdupercoolplantapp.background.databasefunctions;
 
-import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -17,6 +12,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.background.APIs;
+import com.example.superdupercoolplantapp.background.interfaces.NewPlantInterface;
 import com.example.superdupercoolplantapp.background.models.Plant;
 
 import org.json.JSONArray;
@@ -38,11 +34,12 @@ public class ViewModelMyPlants extends ViewModel {
 
         RequestQueue requestQueue = Volley.newRequestQueue(mainActivity);
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, link, null,
-                this::response, error -> Log.e(TAG, "Error getting plants: ", error));
+                response -> queryResponse(response, mainActivity),
+                error -> Log.e(TAG, "Error getting plants: ", error));
         requestQueue.add(request);
     }
 
-    private void response(JSONArray jsonArray) {
+    private void queryResponse(JSONArray jsonArray, MainActivity mainActivity) {
         try {
             ArrayList<Plant> plants = new ArrayList<>();
 
@@ -57,6 +54,11 @@ public class ViewModelMyPlants extends ViewModel {
 
                 Plant newPlant = new Plant(plantID, potNumber, plantName, plantType, photo);
                 plants.add(newPlant);
+
+                boolean lastElement = i == jsonArray.length() - 1;
+
+                Readings.INSTANCE.queryRecentReadings(mainActivity, newPlant, lastElement);
+                Schedule.INSTANCE.getNextScans(mainActivity, newPlant, lastElement);
             }
 
             this.plants.setValue(plants);
@@ -69,7 +71,6 @@ public class ViewModelMyPlants extends ViewModel {
         return plants;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public Plant getPlantByID(int id) {
         return Objects.requireNonNull(plants.getValue())
                 .stream()
@@ -78,16 +79,16 @@ public class ViewModelMyPlants extends ViewModel {
                 .orElse(null);
     }
 
-    public void insertPlant(MainActivity mainActivity, String name, String genus, int potNumber,
-                            int userId, String image) {
+    public void insertPlant(MainActivity mainActivity, NewPlantInterface newPlantInterface,
+                            String name, String genus, int potNumber, int userId, String image) {
         RequestQueue requestQueue = Volley.newRequestQueue(mainActivity);
 
         StringRequest request = new StringRequest(Request.Method.POST,
                 APIs.INSERT_NEW_PLANT,
-                response -> queryPlants(mainActivity, userId), // refresh
+                response -> onNewPlantResponse(mainActivity, userId, newPlantInterface), // refresh
                 error -> {
                     Log.e(TAG, "Error inserting new plant", error);
-                    Toast.makeText(mainActivity, "Error creating new plant.", Toast.LENGTH_SHORT).show();
+                    newPlantInterface.response(false);
                 }
                 ) {
 
@@ -106,5 +107,10 @@ public class ViewModelMyPlants extends ViewModel {
         };
 
         requestQueue.add(request);
+    }
+
+    private void onNewPlantResponse(MainActivity mainActivity, int userId, NewPlantInterface newPlantInterface) {
+        queryPlants(mainActivity, userId);
+        newPlantInterface.response(true);
     }
 }

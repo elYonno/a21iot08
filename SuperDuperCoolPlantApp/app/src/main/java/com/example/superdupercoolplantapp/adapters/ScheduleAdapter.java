@@ -1,5 +1,6 @@
 package com.example.superdupercoolplantapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,9 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.superdupercoolplantapp.R;
 import com.example.superdupercoolplantapp.background.Utilities;
 import com.example.superdupercoolplantapp.background.models.NextScan;
+import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.fragments.LogDirections;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder> {
     private ArrayList<NextScan> nextScans;
@@ -27,8 +30,13 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         this.navController = navController;
     }
 
-    public void update(ArrayList<NextScan> nextScans) {
-        this.nextScans = nextScans;
+    @SuppressLint("NotifyDataSetChanged")
+    public void update(ArrayList<Plant> plants) {
+        this.nextScans = plants
+                .stream()
+                .map(Plant::getNextScan)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toCollection(ArrayList::new));
         notifyDataSetChanged();
     }
 
@@ -39,7 +47,6 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         return new ViewHolder(card);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         NextScan nextScan = nextScans.get(position);

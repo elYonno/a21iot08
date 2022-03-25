@@ -3,6 +3,7 @@ package com.example.superdupercoolplantapp.background.models;
 import com.example.superdupercoolplantapp.background.Emotion;
 
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 public class Plant {
     private final int plantID;
@@ -47,8 +48,8 @@ public class Plant {
         return emotion;
     }
 
-    public ArrayList<Reading> getRecentReadings() {
-        return recentReadings;
+    public Stream<Reading> getRecentReadingsStream() {
+        return recentReadings.stream();
     }
 
     public void setPotNumber(int potNumber) {

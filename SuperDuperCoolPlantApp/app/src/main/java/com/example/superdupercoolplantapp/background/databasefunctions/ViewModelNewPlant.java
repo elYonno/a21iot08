@@ -1,9 +1,7 @@
 package com.example.superdupercoolplantapp.background.databasefunctions;
 
-import android.os.Build;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -70,7 +68,6 @@ public class ViewModelNewPlant extends ViewModel {
         return parameters;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public Parameter getParameterByName(String name) {
         return Objects.requireNonNull(parameters.getValue())
                 .stream()

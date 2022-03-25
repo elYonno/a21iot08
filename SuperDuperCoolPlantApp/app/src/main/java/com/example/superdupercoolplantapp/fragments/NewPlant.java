@@ -1,19 +1,17 @@
 package com.example.superdupercoolplantapp.fragments;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -28,6 +26,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,13 +34,15 @@ import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.R;
 import com.example.superdupercoolplantapp.background.Base64Tool;
 import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelNewPlant;
+import com.example.superdupercoolplantapp.background.interfaces.NewPlantInterface;
 import com.example.superdupercoolplantapp.background.models.Parameter;
 import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelMyPlants;
 
 import java.io.IOException;
 import java.util.ArrayList;
-public class NewPlant extends Fragment {
+
+public class NewPlant extends Fragment implements NewPlantInterface {
 
     private ActivityResultLauncher<Intent> cameraLauncher;
     private ActivityResultLauncher<Intent> storageLauncher;
@@ -56,6 +57,7 @@ public class NewPlant extends Fragment {
     private AutoCompleteTextView plantType;
     private ImageView camera;
     private Button confirm;
+    private ProgressBar progressBar;
 
     private Plant plant;
     private Parameter parameter;
@@ -119,6 +121,7 @@ public class NewPlant extends Fragment {
         plantLight = view.findViewById(R.id.new_plant_light);
         newTypeMessage = view.findViewById(R.id.new_plant_type_warning);
         potNumberError = view.findViewById(R.id.new_plant_pot_number_error);
+        progressBar = view.findViewById(R.id.new_plant_progress_bar);
 
         camera = view.findViewById(R.id.new_plant_image);
         camera.setOnClickListener(this::camera_onClick);
@@ -129,7 +132,6 @@ public class NewPlant extends Fragment {
         return view;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -158,7 +160,6 @@ public class NewPlant extends Fragment {
         activity.hideBottomNav();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void onParametersChange(ArrayList<Parameter> parameters) {
         if (editMode) { // insert values if edit mode
             Parameter newParameter = viewModelNewPlant.getParameterByName(plant.getPlantType());
@@ -203,14 +204,24 @@ public class NewPlant extends Fragment {
                     String stringName = plantName.getText().toString();
                     String stringGenus = plantType.getText().toString();
                     int intPotNumber = Integer.parseInt(potNumber.getText().toString());
-                    String image = null;
+
+                    String image = "";
                     if (profilePicture != null) image = Base64Tool.encodeImage(profilePicture);
 
-                    viewModelMyPlants.insertPlant(activity, stringName, stringGenus, intPotNumber,
+                    viewModelMyPlants.insertPlant(activity, this, stringName, stringGenus, intPotNumber,
                             activity.getAccount().getUserID(), image);
-                    navController.popBackStack();
+                    progressBar.setVisibility(View.VISIBLE);
                 }
             } else Toast.makeText(activity, "Failure inserting a new plant type.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void response(boolean success) {
+        progressBar.setVisibility(View.GONE);
+        if (success) {
+            Toast.makeText(activity, "Successfully added plant.", Toast.LENGTH_SHORT).show();
+            navController.popBackStack();
+        } else Toast.makeText(activity, "Unable to add plant.", Toast.LENGTH_SHORT).show();
     }
 
     private boolean validInput() {
@@ -222,7 +233,8 @@ public class NewPlant extends Fragment {
                 plantLight.getText().toString().equals("")) {
             Toast.makeText(activity, "Please fill in all forms.", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (potNumberError.getVisibility() == View.VISIBLE) {
+        } else if (potNumberError.getVisibility() == View.VISIBLE ||
+                !viewModelNewPlant.checkPotNumberExists(Integer.parseInt(potNumber.getText().toString()))) {
             Toast.makeText(activity, "Please give a valid SmartPot number.", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -230,7 +242,7 @@ public class NewPlant extends Fragment {
     }
 
     private void camera_onClick(View view) {
-         @SuppressLint("UseCompatLoadingForDrawables") AlertDialog dialog = new AlertDialog.Builder(activity)
+         AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setTitle("Choose image")
                 .setPositiveButton("Camera", (dialogInterface, i) -> {
                     Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -243,7 +255,7 @@ public class NewPlant extends Fragment {
                 })
                 .setNeutralButton("Remove", (dialogInterface, i) -> {
                     profilePicture = null;
-                    camera.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera));
+                    camera.setImageDrawable(AppCompatResources.getDrawable(activity, R.drawable.ic_camera));
                     dialogInterface.dismiss();
                 })
                  .create();
@@ -257,7 +269,6 @@ public class NewPlant extends Fragment {
         camera.setImageBitmap(Base64Tool.decodeImage(plant.getImage()));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void onPlantTypeChange(View view, boolean hasFocus) {
         if (!hasFocus) {
             String newText = plantType.getText().toString();

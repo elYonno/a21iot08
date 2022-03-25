@@ -1,26 +1,19 @@
 package com.example.superdupercoolplantapp;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelAccount;
 import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelMyPlants;
-import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelNextScans;
-import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelReadings;
 import com.example.superdupercoolplantapp.background.models.AccountModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,9 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView title;
 
     private ViewModelAccount viewModelAccount;
-    private ViewModelReadings viewModelReadings;
     private ViewModelMyPlants viewModelMyPlants;
-    private ViewModelNextScans viewModelNextScans;
 
     private AccountModel loggedInAccount;
 
@@ -48,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onStart() {
         super.onStart();
@@ -56,21 +46,9 @@ public class MainActivity extends AppCompatActivity {
         viewModelAccount = new ViewModelProvider(this).get(ViewModelAccount.class);
         viewModelAccount.getLoggedInAccount().observe(this, this::updateAccount);
 
-        viewModelReadings = new ViewModelProvider(this).get(ViewModelReadings.class);
-        viewModelNextScans = new ViewModelProvider(this).get(ViewModelNextScans.class);
-
         viewModelMyPlants = new ViewModelProvider(this).get(ViewModelMyPlants.class);
-        viewModelMyPlants.getPlants().observe(this, this::updatePlant);
 
         logIn();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void updatePlant(ArrayList<Plant> plants) {
-        for (Plant plant : plants) {
-            viewModelReadings.queryRecentReadings(this, plant);
-            viewModelNextScans.getNextScans(this, plant);
-        }
     }
 
     private void updateAccount(AccountModel accountModel) {
@@ -80,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
     public AccountModel getAccount() { return loggedInAccount; }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void logIn() {
         // TODO a proper log in function
         viewModelAccount.logIn(this, "elYonno", "SUIIIII");

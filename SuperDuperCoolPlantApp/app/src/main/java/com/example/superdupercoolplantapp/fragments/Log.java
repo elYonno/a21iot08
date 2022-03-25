@@ -1,11 +1,9 @@
 package com.example.superdupercoolplantapp.fragments;
 
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -20,19 +18,23 @@ import android.view.ViewGroup;
 import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.R;
 import com.example.superdupercoolplantapp.adapters.ScheduleAdapter;
-import com.example.superdupercoolplantapp.adapters.ScansAdapter;
-import com.example.superdupercoolplantapp.background.models.NextScan;
-import com.example.superdupercoolplantapp.background.models.Reading;
-import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelNextScans;
-import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelReadings;
+import com.example.superdupercoolplantapp.adapters.ReadingsAdapter;
+import com.example.superdupercoolplantapp.background.databasefunctions.Schedule;
+import com.example.superdupercoolplantapp.background.databasefunctions.Readings;
+import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelMyPlants;
+import com.example.superdupercoolplantapp.background.interfaces.ReadingsObserver;
+import com.example.superdupercoolplantapp.background.interfaces.ScheduleObserver;
+import com.example.superdupercoolplantapp.background.models.Plant;
 
 import java.util.ArrayList;
 
-public class Log extends Fragment {
+public class Log extends Fragment implements ReadingsObserver, ScheduleObserver {
     private MainActivity activity;
 
-    private ScansAdapter scansAdapter;
+    private ReadingsAdapter readingsAdapter;
     private ScheduleAdapter scheduleAdapter;
+
+    private ArrayList<Plant> plants;
 
     @Nullable
     @Override
@@ -42,7 +44,6 @@ public class Log extends Fragment {
         return inflater.inflate(R.layout.fragment_log, container, false);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -55,28 +56,38 @@ public class Log extends Fragment {
 
         RecyclerView past = view.findViewById(R.id.log_past_rec);
         past.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        scansAdapter = new ScansAdapter(navController);
-        past.setAdapter(scansAdapter);
+        readingsAdapter = new ReadingsAdapter(navController);
+        past.setAdapter(readingsAdapter);
 
-        ViewModelReadings readings = new ViewModelProvider(activity).get(ViewModelReadings.class);
-        readings.getRecentReadings().observe(activity, this::updatePast);
-
-        ViewModelNextScans nextScans = new ViewModelProvider(activity).get(ViewModelNextScans.class);
-        nextScans.getNextScans().observe(activity, this::updateFuture);
+        ViewModelMyPlants viewModel = new ViewModelProvider(activity).get(ViewModelMyPlants.class);
+        viewModel.getPlants().observe(activity, this::onPlantsChange);
     }
 
-    private void updateFuture(ArrayList<NextScan> nextScans) {
-        scheduleAdapter.update(nextScans);
+    private void onPlantsChange(ArrayList<Plant> plants) {
+        this.plants = plants;
     }
 
-    private void updatePast(ArrayList<Reading> readings) {
-        scansAdapter.update(readings);
-    }
 
     @Override
     public void onStart() {
         super.onStart();
         activity.setText(getString(R.string.log));
         activity.showBottomNav();
+
+        Readings.INSTANCE.addObserver(this);
+        Schedule.INSTANCE.addObserver(this);
+    }
+
+    @Override
+    public void updateReadings() {
+        if (plants != null)
+            readingsAdapter.update(plants);
+    }
+
+
+    @Override
+    public void updateSchedule() {
+        if (plants != null)
+            scheduleAdapter.update(plants);
     }
 }

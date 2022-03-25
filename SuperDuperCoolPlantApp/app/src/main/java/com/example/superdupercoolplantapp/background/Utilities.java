@@ -1,15 +1,10 @@
 package com.example.superdupercoolplantapp.background;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
 public class Utilities {
 
     public static LocalDateTime stringToTimestamp(String raw) {

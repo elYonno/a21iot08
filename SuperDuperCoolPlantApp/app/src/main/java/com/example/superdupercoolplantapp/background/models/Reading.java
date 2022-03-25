@@ -1,9 +1,5 @@
 package com.example.superdupercoolplantapp.background.models;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import com.example.superdupercoolplantapp.background.Emotion;
 import com.example.superdupercoolplantapp.background.Threshold;
 import com.example.superdupercoolplantapp.background.Utilities;
@@ -18,7 +14,6 @@ public class Reading {
     private final LocalDateTime timestamp;
     private ArrayList<Emotion> emotions;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public Reading(int plantID, String plantName, String rawTimestamp,
                    double lightValue, double humidityValue, double tempValue) {
         this.plantID = plantID;

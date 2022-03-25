@@ -15,18 +15,17 @@ import android.view.ViewGroup;
 import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.R;
 import com.example.superdupercoolplantapp.adapters.ChatAdapter;
+import com.example.superdupercoolplantapp.background.databasefunctions.Readings;
+import com.example.superdupercoolplantapp.background.interfaces.ReadingsObserver;
 import com.example.superdupercoolplantapp.background.models.Plant;
-import com.example.superdupercoolplantapp.background.models.Reading;
 import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelMyPlants;
-import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelReadings;
 
 import java.util.ArrayList;
 
-public class Home extends Fragment {
+public class Home extends Fragment implements ReadingsObserver {
     private MainActivity activity;
-
-    private ChatAdapter adapter;
     private ArrayList<Plant> plants;
+    private ChatAdapter adapter;
 
     @Nullable
     @Override
@@ -45,9 +44,6 @@ public class Home extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         adapter = new ChatAdapter(activity);
         recyclerView.setAdapter(adapter);
-
-        ViewModelReadings viewModelReadings = new ViewModelProvider(activity).get(ViewModelReadings.class);
-        viewModelReadings.getRecentReadings().observe(activity, this::onReadingChange);
         ViewModelMyPlants viewModelMyPlants = new ViewModelProvider(activity).get(ViewModelMyPlants.class);
         viewModelMyPlants.getPlants().observe(activity, this::onPlantsChange);
     }
@@ -56,14 +52,18 @@ public class Home extends Fragment {
         this.plants = plants;
     }
 
-    private void onReadingChange(ArrayList<Reading> readings) {
-        adapter.setPlants(plants);
-    }
-
     @Override
     public void onStart() {
         super.onStart();
         activity.setText(getString(R.string.home));
         activity.showBottomNav();
+
+        Readings.INSTANCE.addObserver(this);
+    }
+
+    @Override
+    public void updateReadings() {
+        if (plants != null)
+            adapter.setPlants(plants);
     }
 }
