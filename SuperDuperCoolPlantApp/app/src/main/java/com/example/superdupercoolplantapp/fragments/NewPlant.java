@@ -141,7 +141,6 @@ public class NewPlant extends Fragment implements NewPlantInterface {
 
         viewModelNewPlant = new ViewModelProvider(activity).get(ViewModelNewPlant.class);
         viewModelNewPlant.queryParameters(activity);
-        viewModelNewPlant.queryPotNumbers(activity);
         viewModelNewPlant.getParameters().observe(activity, this::onParametersChange);
         viewModelNewPlant.getInsertSuccess().observe(activity, this::parameterInsertSuccess);
 
@@ -154,8 +153,12 @@ public class NewPlant extends Fragment implements NewPlantInterface {
             activity.setText(String.valueOf(getResources().getText(R.string.edit_plant)));
             confirm.setText(getResources().getText(R.string.edit_plant));
             plant = viewModelMyPlants.getPlantByID(plantId);
+            viewModelNewPlant.queryPotNumbers(activity, plant.getPotNumber());
             populateFields();
-        } else editMode = false;
+        } else {
+            editMode = false;
+            viewModelNewPlant.queryPotNumbers(activity, -1);
+        }
 
         activity.hideBottomNav();
     }
@@ -200,18 +203,26 @@ public class NewPlant extends Fragment implements NewPlantInterface {
     private void parameterInsertSuccess(Boolean result) {
         if (ready)
             if (result) {
+                String stringName = plantName.getText().toString();
+                String stringGenus = plantType.getText().toString();
+                int intPotNumber = Integer.parseInt(potNumber.getText().toString());
+
+                String image = "";
+                if (profilePicture != null) image = Base64Tool.encodeImage(profilePicture);
+
                 if (!editMode) {
-                    String stringName = plantName.getText().toString();
-                    String stringGenus = plantType.getText().toString();
-                    int intPotNumber = Integer.parseInt(potNumber.getText().toString());
-
-                    String image = "";
-                    if (profilePicture != null) image = Base64Tool.encodeImage(profilePicture);
-
                     viewModelMyPlants.insertPlant(activity, this, stringName, stringGenus, intPotNumber,
                             activity.getAccount().getUserID(), image);
-                    progressBar.setVisibility(View.VISIBLE);
+                } else {
+                    plant.setPlantName(stringName);
+                    plant.setReadingNames(stringName);
+                    plant.setPlantType(stringGenus);
+                    plant.setImage(image);
+                    plant.setPotNumber(intPotNumber);
+                    viewModelMyPlants.updatePlant(activity, this, plant);
                 }
+
+                progressBar.setVisibility(View.VISIBLE);
             } else Toast.makeText(activity, "Failure inserting a new plant type.", Toast.LENGTH_SHORT).show();
     }
 
@@ -266,7 +277,10 @@ public class NewPlant extends Fragment implements NewPlantInterface {
         plantName.setText(plant.getPlantName());
         plantType.setText(plant.getPlantType());
         potNumber.setText(String.valueOf(plant.getPotNumber()));
-        camera.setImageBitmap(Base64Tool.decodeImage(plant.getImage()));
+
+        Bitmap bitmap = Base64Tool.decodeImage(plant.getImage());
+        camera.setImageBitmap(bitmap);
+        profilePicture = bitmap;
     }
 
     private void onPlantTypeChange(View view, boolean hasFocus) {

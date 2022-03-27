@@ -81,13 +81,14 @@ public class ViewModelNewPlant extends ViewModel {
      */
     private ArrayList<Integer> smartPotNumbers;
 
-    public void queryPotNumbers(MainActivity mainActivity) {
+    public void queryPotNumbers(MainActivity mainActivity, int currentPot) {
         RequestQueue requestQueue = Volley.newRequestQueue(mainActivity);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, APIs.GET_POT_NUMBERS, null,
                 response -> {
                     try {
                         smartPotNumbers = new ArrayList<>();
+                        if (currentPot != -1) smartPotNumbers.add(currentPot);
 
                         for (int i = 0; i < response.length(); i++) {
                             JSONObject o = response.getJSONObject(i);

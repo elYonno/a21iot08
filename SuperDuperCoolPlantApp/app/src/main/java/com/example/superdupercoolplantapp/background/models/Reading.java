@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Reading {
     private final int plantID;
-    private final String plantName;
+    private String plantName;
     private final double lightValue, humidityValue, tempValue;
     private final LocalDateTime timestamp;
     private ArrayList<Emotion> emotions;
@@ -22,6 +22,10 @@ public class Reading {
         this.humidityValue = humidityValue;
         this.tempValue = tempValue;
         this.timestamp = Utilities.stringToTimestamp(rawTimestamp);
+    }
+
+    public void setPlantName(String plantName) {
+        this.plantName = plantName;
     }
 
     /**

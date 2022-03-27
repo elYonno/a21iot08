@@ -113,4 +113,33 @@ public class ViewModelMyPlants extends ViewModel {
         queryPlants(mainActivity, userId);
         newPlantInterface.response(true);
     }
+
+    public void updatePlant(MainActivity activity, NewPlantInterface newPlantInterface, Plant plant) {
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+
+        StringRequest request = new StringRequest(Request.Method.POST,
+                APIs.EDIT_PLANT,
+                response ->newPlantInterface.response(true),
+                error -> {
+                    Log.e(TAG, "Error edit plant: ", error);
+                    newPlantInterface.response(false);
+                }
+                ) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                HashMap<String, String> params = new HashMap<>(5);
+
+                params.put("name", plant.getPlantName());
+                params.put("genus", plant.getPlantType());
+                params.put("pot", String.valueOf(plant.getPotNumber()));
+                params.put("image", plant.getImage());
+                params.put("id", String.valueOf(plant.getPlantID()));
+
+                return params;
+            }
+        };
+
+        requestQueue.add(request);
+    }
 }

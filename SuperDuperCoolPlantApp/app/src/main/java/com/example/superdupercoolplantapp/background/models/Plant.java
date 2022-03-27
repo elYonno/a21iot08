@@ -78,6 +78,10 @@ public class Plant {
         }
     }
 
+    public void setReadingNames(String newName) {
+        recentReadings.forEach(reading -> reading.setPlantName(newName) );
+    }
+
     public Reading getMostRecentReading() {
         if (recentReadings.size() != 0) return recentReadings.get(0);
         else return null;
