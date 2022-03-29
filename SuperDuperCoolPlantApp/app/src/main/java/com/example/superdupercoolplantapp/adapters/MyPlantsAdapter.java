@@ -1,5 +1,6 @@
 package com.example.superdupercoolplantapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,17 +18,33 @@ import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.fragments.MyPlantsDirections;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class MyPlantsAdapter extends RecyclerView.Adapter<MyPlantsAdapter.ViewHolder> {
     private final NavController navController;
     private ArrayList<Plant> plants;
+    private ArrayList<Plant> filteredPlants;
 
     public MyPlantsAdapter(NavController navController) {
         this.navController = navController;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void update(ArrayList<Plant> plants) {
         this.plants = plants;
+        this.filteredPlants = plants;
+        notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void filter(String filter) {
+        if (!filter.equals("")) {
+            filteredPlants = plants.stream()
+                    .filter(i -> i.getPlantName().toLowerCase().contains(filter.toLowerCase()))
+                    .collect(Collectors.toCollection(ArrayList::new));
+        } else {    // clear search
+            filteredPlants = plants;
+        }
         notifyDataSetChanged();
     }
 
@@ -40,7 +57,7 @@ public class MyPlantsAdapter extends RecyclerView.Adapter<MyPlantsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Plant plant = plants.get(position);
+        Plant plant = filteredPlants.get(position);
 
         if (position == 0)
             holder.divider.setVisibility(View.GONE);
@@ -59,7 +76,7 @@ public class MyPlantsAdapter extends RecyclerView.Adapter<MyPlantsAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        if (plants != null) return plants.size();
+        if (filteredPlants != null) return filteredPlants.size();
         else return 0;
     }
 

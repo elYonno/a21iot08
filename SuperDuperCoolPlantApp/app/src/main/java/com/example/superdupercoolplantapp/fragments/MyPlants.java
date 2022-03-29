@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -89,7 +90,7 @@ public class MyPlants extends Fragment implements ReadingsObserver {
             adapter.update(plants);
     }
 
-    private static class SearchTextWatcher implements TextWatcher {
+    private class SearchTextWatcher implements TextWatcher {
 
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -103,7 +104,7 @@ public class MyPlants extends Fragment implements ReadingsObserver {
 
         @Override
         public void afterTextChanged(Editable editable) {
-
+            adapter.filter(editable.toString());
         }
     }
 }
