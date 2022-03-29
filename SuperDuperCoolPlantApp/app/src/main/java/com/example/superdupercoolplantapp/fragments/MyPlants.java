@@ -20,23 +20,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.R;
 import com.example.superdupercoolplantapp.adapters.MyPlantsAdapter;
+import com.example.superdupercoolplantapp.background.databasefunctions.Readings;
+import com.example.superdupercoolplantapp.background.interfaces.ReadingsObserver;
 import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelMyPlants;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class MyPlants extends Fragment {
+public class MyPlants extends Fragment implements ReadingsObserver {
     private MainActivity activity;
     private NavController navController;
 
     private MyPlantsAdapter adapter;
+    private ArrayList<Plant> plants;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_plants, container, false);
         activity = (MainActivity) requireActivity();
+        Readings.INSTANCE.addObserver(this);
 
         return view;
     }
@@ -62,6 +66,7 @@ public class MyPlants extends Fragment {
     }
 
     private void onPlantUpdate(ArrayList<Plant> plants) {
+        this.plants = plants;
         adapter.update(plants);
     }
 
@@ -76,6 +81,12 @@ public class MyPlants extends Fragment {
     private void btnAdd_onClick(View view) {
         MyPlantsDirections.ActionMyPlantsToNewPlant action = MyPlantsDirections.actionMyPlantsToNewPlant(-1);
         navController.navigate(action);
+    }
+
+    @Override
+    public void updateReadings() {
+        if (plants != null)
+            adapter.update(plants);
     }
 
     private static class SearchTextWatcher implements TextWatcher {
