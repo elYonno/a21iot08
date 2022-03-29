@@ -41,10 +41,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         refreshLayout = findViewById(R.id.refresh_layout);
-        refreshLayout.setOnRefreshListener(() -> {
-            viewModelMyPlants.queryPlants(MainActivity.this, loggedInAccount.getUserID());
-            refreshLayout.setRefreshing(false);
-        });
+        refreshLayout.setOnRefreshListener(() ->
+                viewModelMyPlants.queryPlants(MainActivity.this, loggedInAccount.getUserID()));
     }
 
     @Override
@@ -85,5 +83,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void setRefreshEnabled(boolean enabled) {
         refreshLayout.setEnabled(enabled);
+    }
+
+    public void stopRefreshAnimation() {
+        refreshLayout.setRefreshing(false);
     }
 }

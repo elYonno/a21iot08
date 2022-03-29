@@ -65,6 +65,7 @@ public class ViewModelMyPlants extends ViewModel {
             }
 
             this.plants.setValue(plants);
+            mainActivity.stopRefreshAnimation();
         } catch (JSONException e) {
             e.printStackTrace();
         }
