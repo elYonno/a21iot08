@@ -1,5 +1,5 @@
 package com.example.superdupercoolplantapp.background.interfaces;
 
-public interface NewPlantInterface {
+public interface PlantInterface {
     void response(boolean success);
 }

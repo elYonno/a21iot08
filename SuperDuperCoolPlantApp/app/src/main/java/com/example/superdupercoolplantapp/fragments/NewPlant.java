@@ -34,15 +34,14 @@ import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.R;
 import com.example.superdupercoolplantapp.background.Base64Tool;
 import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelNewPlant;
-import com.example.superdupercoolplantapp.background.interfaces.NewPlantInterface;
+import com.example.superdupercoolplantapp.background.interfaces.PlantInterface;
 import com.example.superdupercoolplantapp.background.models.Parameter;
-import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelMyPlants;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class NewPlant extends Fragment implements NewPlantInterface {
+public class NewPlant extends Fragment implements PlantInterface {
 
     private ActivityResultLauncher<Intent> cameraLauncher;
     private ActivityResultLauncher<Intent> storageLauncher;
@@ -59,7 +58,7 @@ public class NewPlant extends Fragment implements NewPlantInterface {
     private Button confirm;
     private ProgressBar progressBar;
 
-    private Plant plant;
+    private com.example.superdupercoolplantapp.background.models.Plant plant;
     private Parameter parameter;
     private boolean editMode;
     private boolean ready;

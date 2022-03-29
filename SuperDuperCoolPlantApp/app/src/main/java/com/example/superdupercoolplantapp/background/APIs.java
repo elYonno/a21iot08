@@ -8,6 +8,7 @@ public class APIs {
 
     public final static String RECENT_READINGS = "https://studev.groept.be/api/a21iot08/App_GetRecentReadings/"; // plantID
     public final static String GET_PLANTS = "https://studev.groept.be/api/a21iot08/App_GetPlants/"; // userID
+    public final static String DELETE_PLANT = "https://studev.groept.be/api/a21iot08/App_DeletePlant"; // plantID
 
     public final static String GET_PLANT_PARAMETERS = "https://studev.groept.be/api/a21iot08/App_GetPlantParameters";
     public final static String GET_POT_NUMBERS = "https://studev.groept.be/api/a21iot08/App_GetPotNumbers";

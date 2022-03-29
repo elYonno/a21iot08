@@ -1,5 +1,6 @@
 package com.example.superdupercoolplantapp.fragments;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,14 +25,14 @@ import com.example.superdupercoolplantapp.R;
 import com.example.superdupercoolplantapp.background.Base64Tool;
 import com.example.superdupercoolplantapp.background.LanguageModel;
 import com.example.superdupercoolplantapp.background.Utilities;
+import com.example.superdupercoolplantapp.background.interfaces.PlantInterface;
 import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.background.models.Reading;
 import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelMyPlants;
 
-public class PlantDetail extends Fragment {
+public class PlantDetail extends Fragment implements PlantInterface {
     private ImageView profilePicture;
     private TextView type, potNumber, lastScan, emojis, nextScan, scanResults, lastAction;
-    private Button expand;
     private MotionLayout motionLayout;
 
     private MainActivity activity;
@@ -59,11 +60,18 @@ public class PlantDetail extends Fragment {
         nextScan = view.findViewById(R.id.plant_detail_next_scan);
         scanResults = view.findViewById(R.id.plant_detail_scan_results);
         lastAction = view.findViewById(R.id.plant_detail_scan_action);
-        expand = view.findViewById(R.id.plant_detail_expand);
+
+        Button expand = view.findViewById(R.id.plant_detail_expand);
         expand.setOnClickListener(this::onExpandClicked);
 
+        Button delete = view.findViewById(R.id.plant_detail_delete);
+        delete.setOnClickListener(this::onDeleteClicked);
+
         ScrollView scrollView = view.findViewById(R.id.plant_detail_scroll);
-        scrollView.setOnScrollChangeListener(this::onScrollChange);
+        scrollView.setOnScrollChangeListener((view1, x, y, oldX, oldY) -> {
+            if (y > oldY) motionLayout.transitionToState(R.id.transition_scroll_down);
+            else motionLayout.transitionToStart();
+        });
 
         Button edit = view.findViewById(R.id.plant_detail_edit);
         edit.setOnClickListener(this::onEditClicked);
@@ -75,16 +83,6 @@ public class PlantDetail extends Fragment {
         PlantDetailDirections.ActionPlantDetailToNewPlant action =
                 PlantDetailDirections.actionPlantDetailToNewPlant(plant.getPlantID());
         navController.navigate(action);
-    }
-
-    private void onExpandClicked(View view) {
-        if (seeButtons) {
-            seeButtons = false;
-            motionLayout.transitionToStart();
-        } else {
-            seeButtons = true;
-            motionLayout.transitionToEnd();
-        }
     }
 
     @Override
@@ -105,7 +103,28 @@ public class PlantDetail extends Fragment {
         }
     }
 
-    public void populateFields() {
+    private void onExpandClicked(View view) {
+        if (seeButtons) {
+            seeButtons = false;
+            motionLayout.transitionToStart();
+        } else {
+            seeButtons = true;
+            motionLayout.transitionToEnd();
+        }
+    }
+
+    private void onDeleteClicked(View view) {
+        AlertDialog dialog = new AlertDialog.Builder(activity)
+                .setTitle("Delete Plant")
+                .setMessage("Are you sure you want to delete this plant?")
+                .setPositiveButton("Yes",
+                        (dialogInterface, i) -> viewModel.deletePlant(activity, plant, this))
+                .setNeutralButton("No", (dialogInterface, i) -> dialogInterface.dismiss())
+                .create();
+        dialog.show();
+    }
+
+    private void populateFields() {
         activity.hideBottomNav();
         activity.setText(plant.getPlantName());
 
@@ -132,9 +151,14 @@ public class PlantDetail extends Fragment {
                 : "N/A");
     }
 
-    private void onScrollChange(View scroll, int w, int h, int oldW, int oldH) {
-        // scroll down
-        if (h > oldH) motionLayout.transitionToState(R.id.transition_scroll_down);
-        else motionLayout.transitionToStart();
+    @Override
+    public void response(boolean success) {
+        // delete response
+        if (success) {
+            Toast.makeText(activity, "Successfully deleted plant.", Toast.LENGTH_SHORT).show();
+            navController.popBackStack();
+        } else {
+            Toast.makeText(activity, "Unable to delete plant.", Toast.LENGTH_SHORT).show();
+        }
     }
 }

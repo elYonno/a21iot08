@@ -2,9 +2,11 @@ package com.example.superdupercoolplantapp.background.databasefunctions;
 
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -12,7 +14,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.background.APIs;
-import com.example.superdupercoolplantapp.background.interfaces.NewPlantInterface;
+import com.example.superdupercoolplantapp.background.interfaces.PlantInterface;
 import com.example.superdupercoolplantapp.background.models.Plant;
 
 import org.json.JSONArray;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ViewModelMyPlants extends ViewModel {
     public static final String TAG = "ViewModelMyPlants";
@@ -79,16 +82,16 @@ public class ViewModelMyPlants extends ViewModel {
                 .orElse(null);
     }
 
-    public void insertPlant(MainActivity mainActivity, NewPlantInterface newPlantInterface,
+    public void insertPlant(MainActivity mainActivity, PlantInterface plantInterface,
                             String name, String genus, int potNumber, int userId, String image) {
         RequestQueue requestQueue = Volley.newRequestQueue(mainActivity);
 
         StringRequest request = new StringRequest(Request.Method.POST,
                 APIs.INSERT_NEW_PLANT,
-                response -> onNewPlantResponse(mainActivity, userId, newPlantInterface), // refresh
+                response -> onNewPlantResponse(mainActivity, userId, plantInterface), // refresh
                 error -> {
                     Log.e(TAG, "Error inserting new plant", error);
-                    newPlantInterface.response(false);
+                    plantInterface.response(false);
                 }
                 ) {
 
@@ -109,20 +112,20 @@ public class ViewModelMyPlants extends ViewModel {
         requestQueue.add(request);
     }
 
-    private void onNewPlantResponse(MainActivity mainActivity, int userId, NewPlantInterface newPlantInterface) {
+    private void onNewPlantResponse(MainActivity mainActivity, int userId, PlantInterface plantInterface) {
         queryPlants(mainActivity, userId);
-        newPlantInterface.response(true);
+        plantInterface.response(true);
     }
 
-    public void updatePlant(MainActivity activity, NewPlantInterface newPlantInterface, Plant plant) {
+    public void updatePlant(MainActivity activity, PlantInterface plantInterface, Plant plant) {
         RequestQueue requestQueue = Volley.newRequestQueue(activity);
 
         StringRequest request = new StringRequest(Request.Method.POST,
                 APIs.EDIT_PLANT,
-                response ->newPlantInterface.response(true),
+                response -> plantInterface.response(true),
                 error -> {
                     Log.e(TAG, "Error edit plant: ", error);
-                    newPlantInterface.response(false);
+                    plantInterface.response(false);
                 }
                 ) {
 
@@ -141,5 +144,38 @@ public class ViewModelMyPlants extends ViewModel {
         };
 
         requestQueue.add(request);
+    }
+
+    public void deletePlant(MainActivity activity, Plant plant, PlantInterface plantInterface) {
+        RequestQueue requestQueue = Volley.newRequestQueue(activity);
+
+        StringRequest request = new StringRequest(Request.Method.POST,
+                APIs.DELETE_PLANT,
+                response -> onDeletePlant(plantInterface, plant),
+                error -> {
+                    Log.e(TAG, "Error deleting plant: ", error);
+                    plantInterface.response(false);
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+
+                params.put("id", String.valueOf(plant.getPlantID()));
+
+                return params;
+            }
+        };
+
+        requestQueue.add(request);
+    }
+
+    private void onDeletePlant(PlantInterface plantInterface, Plant plant) {
+        plantInterface.response(true);
+        ArrayList<Plant> newPlants = Objects.requireNonNull(plants.getValue())
+                .stream()
+                .filter(p -> p.getPlantID() != plant.getPlantID())
+                .collect(Collectors.toCollection(ArrayList::new));
+        plants.setValue(newPlants);
     }
 }
