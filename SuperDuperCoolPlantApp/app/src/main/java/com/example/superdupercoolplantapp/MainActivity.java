@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
     private TextView title;
+    private SwipeRefreshLayout refreshLayout;
 
     private ViewModelAccount viewModelAccount;
     private ViewModelMyPlants viewModelMyPlants;
@@ -37,6 +39,12 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+        refreshLayout = findViewById(R.id.refresh_layout);
+        refreshLayout.setOnRefreshListener(() -> {
+            viewModelMyPlants.queryPlants(MainActivity.this, loggedInAccount.getUserID());
+            refreshLayout.setRefreshing(false);
+        });
     }
 
     @Override
@@ -73,5 +81,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void hideBottomNav() {
         bottomNavigationView.setVisibility(View.GONE);
+    }
+
+    public void setRefreshEnabled(boolean enabled) {
+        refreshLayout.setEnabled(enabled);
     }
 }

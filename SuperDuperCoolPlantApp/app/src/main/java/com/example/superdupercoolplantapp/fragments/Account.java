@@ -79,6 +79,7 @@ public class Account extends Fragment {
         super.onStart();
         activity.setText(getString(R.string.account));
         activity.showBottomNav();
+        activity.setRefreshEnabled(true);
     }
 
     private void onAccountChanged(AccountModel accountModel) {

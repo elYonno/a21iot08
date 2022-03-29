@@ -158,8 +158,13 @@ public class NewPlant extends Fragment implements PlantInterface {
             editMode = false;
             viewModelNewPlant.queryPotNumbers(activity, -1);
         }
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
         activity.hideBottomNav();
+        activity.setRefreshEnabled(false);
     }
 
     private void onParametersChange(ArrayList<Parameter> parameters) {

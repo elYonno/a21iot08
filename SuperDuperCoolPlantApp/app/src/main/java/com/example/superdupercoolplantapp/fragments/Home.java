@@ -57,6 +57,7 @@ public class Home extends Fragment implements ReadingsObserver {
         super.onStart();
         activity.setText(getString(R.string.home));
         activity.showBottomNav();
+        activity.setRefreshEnabled(true);
 
         Readings.INSTANCE.addObserver(this);
     }

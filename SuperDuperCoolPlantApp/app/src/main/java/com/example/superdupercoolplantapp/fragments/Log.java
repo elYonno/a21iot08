@@ -73,6 +73,7 @@ public class Log extends Fragment implements ReadingsObserver, ScheduleObserver 
         super.onStart();
         activity.setText(getString(R.string.log));
         activity.showBottomNav();
+        activity.setRefreshEnabled(true);
 
         Readings.INSTANCE.addObserver(this);
         Schedule.INSTANCE.addObserver(this);

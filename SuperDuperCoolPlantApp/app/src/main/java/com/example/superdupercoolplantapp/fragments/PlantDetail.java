@@ -103,6 +103,14 @@ public class PlantDetail extends Fragment implements PlantInterface {
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        activity.hideBottomNav();
+        activity.setRefreshEnabled(true);
+    }
+
     private void onExpandClicked(View view) {
         if (seeButtons) {
             seeButtons = false;
@@ -125,7 +133,6 @@ public class PlantDetail extends Fragment implements PlantInterface {
     }
 
     private void populateFields() {
-        activity.hideBottomNav();
         activity.setText(plant.getPlantName());
 
         profilePicture.setImageBitmap(Base64Tool.decodeImage(plant.getImage()));

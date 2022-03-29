@@ -70,6 +70,7 @@ public class MyPlants extends Fragment {
         super.onStart();
         activity.setText(getString(R.string.my_plants));
         activity.showBottomNav();
+        activity.setRefreshEnabled(true);
     }
 
     private void btnAdd_onClick(View view) {
