@@ -27,8 +27,6 @@ import com.example.superdupercoolplantapp.fragments.HomeDirections;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private ArrayList<Chat> chats;
