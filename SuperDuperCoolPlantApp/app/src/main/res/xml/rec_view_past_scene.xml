@@ -4,14 +4,14 @@
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
-        motion:constraintSetEnd="@+id/end"
-        motion:constraintSetStart="@id/start"
+        motion:constraintSetEnd="@+id/scans_end"
+        motion:constraintSetStart="@id/scans_start"
         motion:duration="250">
        <KeyFrameSet>
        </KeyFrameSet>
     </Transition>
 
-    <ConstraintSet android:id="@+id/start">
+    <ConstraintSet android:id="@+id/scans_start">
         <Constraint
             android:id="@+id/rec_view_scan_comment"
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
             android:id="@+id/rec_view_scan_time" />
     </ConstraintSet>
 
-    <ConstraintSet android:id="@+id/end">
+    <ConstraintSet android:id="@+id/scans_end">
         <Constraint
             android:id="@+id/rec_view_scan_comment"
             android:layout_width="match_parent"

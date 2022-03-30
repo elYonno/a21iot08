@@ -8,7 +8,6 @@
         <entry key="..\:/Users/Yonathan Irawan/Documents/GitHub/a21iot08/SuperDuperCoolPlantApp/app/src/main/res/layout/fragment_log.xml" value="0.23324275362318841" />
         <entry key="..\:/Users/Yonathan Irawan/Documents/GitHub/a21iot08/SuperDuperCoolPlantApp/app/src/main/res/layout/fragment_login.xml" value="0.23324275362318841" />
         <entry key="..\:/Users/Yonathan Irawan/Documents/GitHub/a21iot08/SuperDuperCoolPlantApp/app/src/main/res/layout/fragment_my_plants.xml" value="0.23324275362318841" />
-        <entry key="..\:/Users/Yonathan Irawan/Documents/GitHub/a21iot08_GITHUB/SuperDuperCoolPlantApp/app/src/main/res/layout/activity_main.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/Yonathan Irawan/Documents/GitHub/a21iot08_GITHUB/SuperDuperCoolPlantApp/app/src/main/res/layout/fragment_account.xml" value="0.25364583333333335" />
         <entry key="..\:/Users/Yonathan Irawan/Documents/GitHub/a21iot08_GITHUB/SuperDuperCoolPlantApp/app/src/main/res/layout/fragment_my_plants.xml" value="0.25" />
         <entry key="..\:/Users/Yonathan Irawan/Documents/GitHub/a21iot08_GITHUB/SuperDuperCoolPlantApp/app/src/main/res/layout/fragment_plant_detail.xml" value="0.23324275362318841" />
@@ -54,7 +53,8 @@
         <entry key="..\:/Users/yonat/Documents/GitHub/a21iot08_GITHUB/SuperDuperCoolPlantApp/app/src/main/res/layout/rec_view_chat.xml" value="0.5333333333333333" />
         <entry key="..\:/Users/yonat/Documents/GitHub/a21iot08_GITHUB/SuperDuperCoolPlantApp/app/src/main/res/layout/rec_view_my_plants.xml" value="0.67" />
         <entry key="..\:/Users/yonat/Documents/GitHub/a21iot08_GITHUB/SuperDuperCoolPlantApp/app/src/main/res/layout/rec_view_past.xml" value="0.5871446229913473" />
-        <entry key="..\:/Users/yonat/Documents/GitHub/a21iot08_GITHUB/SuperDuperCoolPlantApp/app/src/main/res/layout/rec_view_scans.xml" value="0.5" />
+        <entry key="..\:/Users/yonat/Documents/GitHub/a21iot08_GITHUB/SuperDuperCoolPlantApp/app/src/main/res/layout/rec_view_scans.xml" value="0.67" />
+        <entry key="..\:/Users/yonat/Documents/GitHub/a21iot08_GITHUB/SuperDuperCoolPlantApp/app/src/main/res/layout/rec_view_schedule.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/yonat/Documents/GitHub/a21iot08_GITHUB/SuperDuperCoolPlantApp/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/yonat/Documents/GitHub/a21iot08_GITHUB/SuperDuperCoolPlantApp/app/src/main/res/mipmap-anydpi-v26/ic_banner.xml" value="0.3675" />
         <entry key="..\:/Users/yonat/Documents/GitHub/a21iot08_GITHUB/SuperDuperCoolPlantApp/app/src/main/res/mipmap-anydpi-v26/ic_flora_bot.xml" value="0.3675" />
@@ -73,7 +73,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

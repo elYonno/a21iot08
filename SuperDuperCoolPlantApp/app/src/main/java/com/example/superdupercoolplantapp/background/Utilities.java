@@ -1,9 +1,12 @@
 package com.example.superdupercoolplantapp.background;
 
+import com.example.superdupercoolplantapp.background.models.Reading;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class Utilities {
 
@@ -52,6 +55,14 @@ public class Utilities {
                 return dateTime.format(DateTimeFormatter.ofPattern("HH:mm"));               // same date
             else
                 return dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));    // different date
+        } else return "N/A";
+    }
+
+    public static String getFormattedReadings(Reading reading) {
+        if (reading != null) {
+            String humidUnit = "%";
+            return String.format(Locale.UK,"Temperature: %.0f °C\nHumidity: %.0f %s\nLight: %.0f lux",
+                    reading.getTempValue(), reading.getHumidityValue(), humidUnit, reading.getLightValue());
         } else return "N/A";
     }
 }

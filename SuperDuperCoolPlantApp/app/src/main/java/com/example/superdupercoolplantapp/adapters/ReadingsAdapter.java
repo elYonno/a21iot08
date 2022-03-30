@@ -26,9 +26,11 @@ import java.util.stream.Collectors;
 public class ReadingsAdapter extends RecyclerView.Adapter<ReadingsAdapter.ViewHolder> {
     private ArrayList<Reading> readings;
     private final NavController navController;
+    private final RecyclerView rec;
 
-    public ReadingsAdapter(NavController navController) {
+    public ReadingsAdapter(NavController navController, RecyclerView rec) {
         this.navController = navController;
+        this.rec = rec;
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -57,9 +59,10 @@ public class ReadingsAdapter extends RecyclerView.Adapter<ReadingsAdapter.ViewHo
 
         holder.time.setText(Utilities.getHowLongAgo(reading.getTimestamp()));
 
-        holder.comment.setText(String.format("%s\n\n%s",
+        holder.comment.setText(String.format("%s\n\n%s\n\n%s",
                 LanguageModel.scanResult(reading.getPlantName(), reading.getEmotions()),
-                LanguageModel.actionResult(reading.getEmotions())));
+                LanguageModel.actionResult(reading.getEmotions()),
+                Utilities.getFormattedReadings(reading)));
 
         if (position == 0) holder.divider.setVisibility(View.GONE);
 
@@ -73,10 +76,48 @@ public class ReadingsAdapter extends RecyclerView.Adapter<ReadingsAdapter.ViewHo
         holder.layout.setOnClickListener(view -> {
             if (holder.comment.getVisibility() == View.VISIBLE) {
                 holder.layout.transitionToStart();
+                holder.time.setText(Utilities.getHowLongAgo(reading.getTimestamp()));
             } else {
                 holder.layout.transitionToEnd();
+                holder.time.setText(Utilities.getFormattedTime(reading.getTimestamp()));
+                hideViews(position);
             }
         });
+
+        holder.layout.setTransitionListener(new MotionLayout.TransitionListener() {
+            @Override
+            public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) {
+
+            }
+
+            @Override
+            public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+
+            }
+
+            @Override
+            public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+                if (currentId == R.id.scans_start) {
+                    holder.time.setText(Utilities.getHowLongAgo(reading.getTimestamp()));
+                }
+            }
+
+            @Override
+            public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) {
+
+            }
+        });
+    }
+
+    private void hideViews(int i) {
+        for (int j = 0; j < getItemCount(); j++) {
+            if (j != i) {
+                ReadingsAdapter.ViewHolder view = (ViewHolder) rec.findViewHolderForAdapterPosition(j);
+                if (view != null) {
+                    view.hide();
+                }
+            }
+        }
     }
 
     @Override
@@ -97,6 +138,10 @@ public class ReadingsAdapter extends RecyclerView.Adapter<ReadingsAdapter.ViewHo
             comment = itemView.findViewById(R.id.rec_view_scan_comment);
             layout = itemView.findViewById(R.id.rec_view_scan_layout);
             divider = itemView.findViewById(R.id.rec_view_scan_divider);
+        }
+
+        public void hide() {
+            layout.transitionToStart();
         }
     }
 }

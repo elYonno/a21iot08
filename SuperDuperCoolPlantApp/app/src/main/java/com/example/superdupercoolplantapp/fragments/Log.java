@@ -56,7 +56,7 @@ public class Log extends Fragment implements ReadingsObserver, ScheduleObserver 
 
         RecyclerView past = view.findViewById(R.id.log_past_rec);
         past.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        readingsAdapter = new ReadingsAdapter(navController);
+        readingsAdapter = new ReadingsAdapter(navController, past);
         past.setAdapter(readingsAdapter);
 
         ViewModelMyPlants viewModel = new ViewModelProvider(activity).get(ViewModelMyPlants.class);
