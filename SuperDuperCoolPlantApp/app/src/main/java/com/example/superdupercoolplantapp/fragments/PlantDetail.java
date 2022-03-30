@@ -25,12 +25,17 @@ import com.example.superdupercoolplantapp.R;
 import com.example.superdupercoolplantapp.background.Base64Tool;
 import com.example.superdupercoolplantapp.background.LanguageModel;
 import com.example.superdupercoolplantapp.background.Utilities;
+import com.example.superdupercoolplantapp.background.databasefunctions.Readings;
+import com.example.superdupercoolplantapp.background.databasefunctions.Schedule;
 import com.example.superdupercoolplantapp.background.interfaces.PlantInterface;
+import com.example.superdupercoolplantapp.background.interfaces.ReadingsObserver;
+import com.example.superdupercoolplantapp.background.interfaces.RefreshOverride;
+import com.example.superdupercoolplantapp.background.interfaces.ScheduleObserver;
 import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.background.models.Reading;
 import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelMyPlants;
 
-public class PlantDetail extends Fragment implements PlantInterface {
+public class PlantDetail extends Fragment implements PlantInterface, RefreshOverride, ReadingsObserver, ScheduleObserver {
     private ImageView profilePicture;
     private TextView type, potNumber, lastScan, emojis, nextScan, scanResults, lastAction;
     private MotionLayout motionLayout;
@@ -108,7 +113,9 @@ public class PlantDetail extends Fragment implements PlantInterface {
         super.onStart();
 
         activity.hideBottomNav();
-        activity.setRefreshEnabled(true);
+        activity.setRefreshOverride(this);
+        Readings.INSTANCE.addObserver(this);
+        Schedule.INSTANCE.addObserver(this);
     }
 
     private void onExpandClicked(View view) {
@@ -138,7 +145,33 @@ public class PlantDetail extends Fragment implements PlantInterface {
         profilePicture.setImageBitmap(Base64Tool.decodeImage(plant.getImage()));
         type.setText(plant.getPlantType());
         potNumber.setText(String.valueOf(plant.getPotNumber()));
+    }
 
+    @Override
+    public void plantResponse(boolean success) {
+        // delete response
+        if (success) {
+            Toast.makeText(activity, "Successfully deleted plant.", Toast.LENGTH_SHORT).show();
+            navController.popBackStack();
+        } else {
+            Toast.makeText(activity, "Unable to delete plant.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRefreshResponse() {
+        if (plant != null) {
+            Readings.INSTANCE.queryRecentReadings(activity, plant, true);
+            Schedule.INSTANCE.getNextScans(activity, plant, true);
+        } else {
+            Toast.makeText(activity, "Unable to find plant details.", Toast.LENGTH_SHORT).show();
+            navController.popBackStack();
+            activity.stopRefreshAnimation();
+        }
+    }
+
+    @Override
+    public void updateReadings() {
         Reading mostRecent = plant.getMostRecentReading();
 
         if (mostRecent != null) {
@@ -152,20 +185,14 @@ public class PlantDetail extends Fragment implements PlantInterface {
             scanResults.setText("N/A");
             lastAction.setText("N/A");
         }
-
-        nextScan.setText((plant.getNextScan() != null)?
-                Utilities.getInHowLong(plant.getNextScan().getTimestamp())
-                : "N/A");
+        activity.stopRefreshAnimation();
     }
 
     @Override
-    public void response(boolean success) {
-        // delete response
-        if (success) {
-            Toast.makeText(activity, "Successfully deleted plant.", Toast.LENGTH_SHORT).show();
-            navController.popBackStack();
-        } else {
-            Toast.makeText(activity, "Unable to delete plant.", Toast.LENGTH_SHORT).show();
-        }
+    public void updateSchedule() {
+        nextScan.setText((plant.getNextScan() != null)?
+                Utilities.getInHowLong(plant.getNextScan().getTimestamp())
+                : "N/A");
+        activity.stopRefreshAnimation();
     }
 }

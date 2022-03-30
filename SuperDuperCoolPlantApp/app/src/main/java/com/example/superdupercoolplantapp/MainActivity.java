@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelAccount;
 import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelMyPlants;
+import com.example.superdupercoolplantapp.background.interfaces.RefreshOverride;
 import com.example.superdupercoolplantapp.background.models.AccountModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -41,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         refreshLayout = findViewById(R.id.refresh_layout);
-        refreshLayout.setOnRefreshListener(() ->
-                viewModelMyPlants.queryPlants(MainActivity.this, loggedInAccount.getUserID()));
     }
 
     @Override
@@ -83,6 +82,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void setRefreshEnabled(boolean enabled) {
         refreshLayout.setEnabled(enabled);
+        refreshLayout.setOnRefreshListener(() ->
+                viewModelMyPlants.queryPlants(MainActivity.this, loggedInAccount.getUserID()));
+    }
+
+    public void setRefreshOverride(RefreshOverride override) {
+        refreshLayout.setEnabled(true);
+        refreshLayout.setOnRefreshListener(override::onRefreshResponse);
     }
 
     public void stopRefreshAnimation() {

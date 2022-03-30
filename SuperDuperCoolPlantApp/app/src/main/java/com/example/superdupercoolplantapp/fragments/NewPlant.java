@@ -231,7 +231,7 @@ public class NewPlant extends Fragment implements PlantInterface {
     }
 
     @Override
-    public void response(boolean success) {
+    public void plantResponse(boolean success) {
         progressBar.setVisibility(View.GONE);
         if (success) {
             Toast.makeText(activity, "Successfully added plant.", Toast.LENGTH_SHORT).show();

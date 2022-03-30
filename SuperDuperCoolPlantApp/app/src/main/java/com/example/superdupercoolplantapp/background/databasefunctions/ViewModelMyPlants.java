@@ -90,7 +90,7 @@ public class ViewModelMyPlants extends ViewModel {
                 response -> onNewPlantResponse(mainActivity, userId, plantInterface), // refresh
                 error -> {
                     Log.e(TAG, "Error inserting new plant", error);
-                    plantInterface.response(false);
+                    plantInterface.plantResponse(false);
                 }
                 ) {
 
@@ -113,7 +113,7 @@ public class ViewModelMyPlants extends ViewModel {
 
     private void onNewPlantResponse(MainActivity mainActivity, int userId, PlantInterface plantInterface) {
         queryPlants(mainActivity, userId);
-        plantInterface.response(true);
+        plantInterface.plantResponse(true);
     }
 
     public void updatePlant(MainActivity activity, PlantInterface plantInterface, Plant plant) {
@@ -121,10 +121,10 @@ public class ViewModelMyPlants extends ViewModel {
 
         StringRequest request = new StringRequest(Request.Method.POST,
                 APIs.EDIT_PLANT,
-                response -> plantInterface.response(true),
+                response -> plantInterface.plantResponse(true),
                 error -> {
                     Log.e(TAG, "Error edit plant: ", error);
-                    plantInterface.response(false);
+                    plantInterface.plantResponse(false);
                 }
                 ) {
 
@@ -153,7 +153,7 @@ public class ViewModelMyPlants extends ViewModel {
                 response -> onDeletePlant(plantInterface, plant),
                 error -> {
                     Log.e(TAG, "Error deleting plant: ", error);
-                    plantInterface.response(false);
+                    plantInterface.plantResponse(false);
                 }) {
 
             @Override
@@ -170,7 +170,7 @@ public class ViewModelMyPlants extends ViewModel {
     }
 
     private void onDeletePlant(PlantInterface plantInterface, Plant plant) {
-        plantInterface.response(true);
+        plantInterface.plantResponse(true);
         ArrayList<Plant> newPlants = Objects.requireNonNull(plants.getValue())
                 .stream()
                 .filter(p -> p.getPlantID() != plant.getPlantID())
