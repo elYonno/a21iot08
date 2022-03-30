@@ -1,6 +1,7 @@
 package com.example.superdupercoolplantapp.background;
 
 public enum Emotion {
+    UNKNOWN("❓"),
     HAPPY("\uD83D\uDE03"),
     ANGRY("\uD83D\uDE21"),
     THIRSTY("\uD83E\uDD24"),

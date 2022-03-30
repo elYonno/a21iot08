@@ -21,7 +21,7 @@ public class Plant {
         this.image = image;
         this.recentReadings = new ArrayList<>();
         this.nextScan = null;
-        this.emotion = Emotion.HAPPY;
+        this.emotion = Emotion.UNKNOWN;
     }
 
     public int getPlantID() {
