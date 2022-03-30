@@ -68,8 +68,9 @@ public enum Readings {
                     plant.addReading(newReading);
                 }
 
-                if (lastPlant) notifyObservers();
             }
+
+            if (lastPlant) notifyObservers();
         } catch (JSONException e) {
             e.printStackTrace();
         }
