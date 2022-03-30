@@ -26,6 +26,9 @@ import com.example.superdupercoolplantapp.background.models.Reading;
 import com.example.superdupercoolplantapp.fragments.HomeDirections;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private ArrayList<Chat> chats;
@@ -46,6 +49,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 chats.addAll(Chat.createChats(plant, reading));
             }
         }
+
+        chats.sort(Comparator.comparing(chat -> chat.getReading().getTimestamp()));
 
         notifyDataSetChanged();
     }

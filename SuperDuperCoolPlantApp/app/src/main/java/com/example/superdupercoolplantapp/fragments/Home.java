@@ -40,8 +40,10 @@ public class Home extends Fragment implements ReadingsObserver {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RecyclerView recyclerView = view.findViewById(R.id.home_rec_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        final RecyclerView recyclerView = view.findViewById(R.id.home_rec_view);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
+        layoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(layoutManager);
         adapter = new ChatAdapter(activity);
         recyclerView.setAdapter(adapter);
         ViewModelMyPlants viewModelMyPlants = new ViewModelProvider(activity).get(ViewModelMyPlants.class);
