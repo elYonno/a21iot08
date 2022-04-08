@@ -51,7 +51,7 @@ public class NewPlant extends Fragment implements PlantInterface {
     private ViewModelMyPlants viewModelMyPlants;
     private ViewModelNewPlant viewModelNewPlant;
 
-    private EditText plantName, potNumber, plantTemperature, plantHumidity, plantLight;
+    private EditText plantName, potNumber, plantTemperature, waterSchedule, plantLight;
     private TextView newTypeMessage, potNumberError;
     private AutoCompleteTextView plantType;
     private ImageView camera;
@@ -116,7 +116,7 @@ public class NewPlant extends Fragment implements PlantInterface {
         plantType = view.findViewById(R.id.new_plant_type);
         potNumber = view.findViewById(R.id.new_plant_smartpot);
         plantTemperature = view.findViewById(R.id.new_plant_temperature);
-        plantHumidity = view.findViewById(R.id.new_plant_humidity);
+        waterSchedule = view.findViewById(R.id.new_plant_water);
         plantLight = view.findViewById(R.id.new_plant_light);
         newTypeMessage = view.findViewById(R.id.new_plant_type_warning);
         potNumberError = view.findViewById(R.id.new_plant_pot_number_error);
@@ -174,7 +174,7 @@ public class NewPlant extends Fragment implements PlantInterface {
             if (newParameter != null) {
                 parameter = newParameter;
                 plantLight.setText(String.valueOf(newParameter.getLight()));
-                plantHumidity.setText(String.valueOf(newParameter.getHumidity()));
+                waterSchedule.setText(String.valueOf(newParameter.getNextWaterHour()));
                 plantTemperature.setText(String.valueOf(newParameter.getTemp()));
             }
         }
@@ -195,10 +195,10 @@ public class NewPlant extends Fragment implements PlantInterface {
             if (parameter == null) { // create new plant parameter
                 String genusName = plantType.getText().toString();
                 double doubleTemp = Double.parseDouble(plantTemperature.getText().toString());
-                double doubleHumidity = Double.parseDouble(plantHumidity.getText().toString());
+                int waterEvery = Integer.parseInt(waterSchedule.getText().toString());
                 double doubleLight = Double.parseDouble(plantLight.getText().toString());
 
-                parameter = new Parameter(-1, genusName, doubleLight, doubleHumidity, doubleTemp);
+                parameter = new Parameter(-1, genusName, doubleLight, waterEvery, doubleTemp);
                 viewModelNewPlant.insertParameter(activity, parameter);
             } else parameterInsertSuccess(true);
         }
@@ -244,7 +244,7 @@ public class NewPlant extends Fragment implements PlantInterface {
                 plantType.getText().toString().equals("") ||
                 potNumber.getText().toString().equals("") ||
                 plantTemperature.getText().toString().equals("") ||
-                plantHumidity.getText().toString().equals("") ||
+                waterSchedule.getText().toString().equals("") ||
                 plantLight.getText().toString().equals("")) {
             Toast.makeText(activity, "Please fill in all forms.", Toast.LENGTH_SHORT).show();
             return false;
@@ -303,14 +303,14 @@ public class NewPlant extends Fragment implements PlantInterface {
                     plantTemperature.setEnabled(true);
                     plantTemperature.setText("");
 
-                    plantHumidity.setEnabled(true);
-                    plantHumidity.setText("");
+                    waterSchedule.setEnabled(true);
+                    waterSchedule.setText("");
 
                     plantLight.setEnabled(true);
                     plantLight.setText("");
                 } else {
                     plantTemperature.setEnabled(false);
-                    plantHumidity.setEnabled(false);
+                    waterSchedule.setEnabled(false);
                     plantLight.setEnabled(false);
                 }
             } else {
@@ -319,8 +319,8 @@ public class NewPlant extends Fragment implements PlantInterface {
                 plantTemperature.setEnabled(false);
                 plantTemperature.setText(String.valueOf(parameter.getTemp()));
 
-                plantHumidity.setEnabled(false);
-                plantHumidity.setText(String.valueOf(parameter.getHumidity()));
+                waterSchedule.setEnabled(false);
+                waterSchedule.setText(String.valueOf(parameter.getNextWaterHour()));
 
                 plantLight.setEnabled(false);
                 plantLight.setText(String.valueOf(parameter.getLight()));

@@ -53,8 +53,9 @@ public enum Schedule {
 
                     String plantName = o.getString("plantName");
                     String nextScan = o.getString("nextScan");
+                    String nextWater = o.getString("nextWater");
 
-                    NextScan newScan = new NextScan(plant.getPlantID(), plantName, nextScan);
+                    NextScan newScan = new NextScan(plant.getPlantID(), plantName, nextScan, nextWater);
                     plant.setNextScan(newScan);
 
                     if (lastPlant) notifyObservers();

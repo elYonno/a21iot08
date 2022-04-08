@@ -51,10 +51,10 @@ public class ViewModelNewPlant extends ViewModel {
                 int id = o.getInt("plantType");
                 String type = o.getString("plantGenus");
                 double light = o.getDouble("optimalLight");
-                double humidity = o.getDouble("optimalHumidity");
+                int waterEveryHour = o.getInt("waterEveryHour");
                 double temp = o.getDouble("optimalTemp");
 
-                Parameter parameter = new Parameter(id, type, light, humidity, temp);
+                Parameter parameter = new Parameter(id, type, light, waterEveryHour, temp);
                 newParam.add(parameter);
             }
 
@@ -126,7 +126,7 @@ public class ViewModelNewPlant extends ViewModel {
 
                 param.put("genus", parameter.getPlantGenus());
                 param.put("light", String.valueOf(parameter.getLight()));
-                param.put("humid", String.valueOf(parameter.getHumidity()));
+                param.put("water", String.valueOf(parameter.getNextWaterHour()));
                 param.put("temp", String.valueOf(parameter.getTemp()));
 
                 return param;

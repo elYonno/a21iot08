@@ -10,7 +10,7 @@ import java.util.Locale;
 
 public class Utilities {
 
-    public static LocalDateTime stringToTimestamp(String raw) {
+    public static LocalDateTime stringToLocalDateTime(String raw) {
         if (raw == null) return null;
         else return LocalDateTime.parse(raw,
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -60,9 +60,10 @@ public class Utilities {
 
     public static String getFormattedReadings(Reading reading) {
         if (reading != null) {
-            String humidUnit = "%";
-            return String.format(Locale.UK,"Temperature: %.0f °C\nHumidity: %.0f %s\nLight: %.0f lux",
-                    reading.getTempValue(), reading.getHumidityValue(), humidUnit, reading.getLightValue());
+            String tankStatus = (reading.isTankEmpty())? "Empty" : "Full";
+
+            return String.format(Locale.UK,"Temperature: %.0f °C\nWater tank: %s\nLight: %.0f lux",
+                    reading.getTempValue(), tankStatus, reading.getLightValue());
         } else return "N/A";
     }
 }

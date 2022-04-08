@@ -1,7 +1,6 @@
 package com.example.superdupercoolplantapp.adapters;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +51,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         NextScan nextScan = nextScans.get(position);
 
         holder.plantName.setText(nextScan.getPlantName());
-        holder.time.setText(Utilities.getInHowLong(nextScan.getTimestamp()));
+        holder.time.setText(Utilities.getInHowLong(nextScan.getSchedule()));
+        holder.water.setText(Utilities.getHowLongAgo(nextScan.getNextWater()));
 
         holder.card.setOnClickListener(view -> {
             LogDirections.ActionLogToPlantDetail action =
@@ -68,7 +68,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView plantName, time;
+        private final TextView plantName, time, water;
         private final CardView card;
 
         public ViewHolder(@NonNull View itemView) {
@@ -76,6 +76,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
             plantName = itemView.findViewById(R.id.rec_view_schedule_name);
             time = itemView.findViewById(R.id.rec_view_schedule_time);
             card = itemView.findViewById(R.id.rec_view_schedule_card);
+            water = itemView.findViewById(R.id.rec_view_schedule_water);
         }
     }
 }

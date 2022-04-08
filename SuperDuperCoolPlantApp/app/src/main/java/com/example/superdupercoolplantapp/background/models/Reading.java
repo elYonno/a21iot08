@@ -10,18 +10,19 @@ import java.util.ArrayList;
 public class Reading {
     private final int plantID;
     private String plantName;
-    private final double lightValue, humidityValue, tempValue;
+    private final double lightValue, tempValue;
+    private final boolean tankEmpty;
     private final LocalDateTime timestamp;
     private ArrayList<Emotion> emotions;
 
     public Reading(int plantID, String plantName, String rawTimestamp,
-                   double lightValue, double humidityValue, double tempValue) {
+                   double lightValue, boolean tankEmpty, double tempValue) {
         this.plantID = plantID;
         this.plantName = plantName;
         this.lightValue = lightValue;
-        this.humidityValue = humidityValue;
+        this.tankEmpty = tankEmpty;
         this.tempValue = tempValue;
-        this.timestamp = Utilities.stringToTimestamp(rawTimestamp);
+        this.timestamp = Utilities.stringToLocalDateTime(rawTimestamp);
     }
 
     public void setPlantName(String plantName) {
@@ -32,17 +33,15 @@ public class Reading {
      * Creates list of emotions. If list is empty, plant is happy. If list has a size larger than 1,
      * plant is angry as there are multiple problems.
      * @param deltaLight difference in light to optimal
-     * @param deltaHumidity difference in humidity to optimal
      * @param deltaTemp difference in temperature to optimal
      */
-    public void setEmotions(double deltaLight, double deltaHumidity, double deltaTemp) {
+    public void setEmotions(double deltaLight, boolean tankEmpty, double deltaTemp) {
         emotions = new ArrayList<>();
 
         if (Threshold.LIGHT < deltaLight) emotions.add(Emotion.LIGHT); // too light
         else if (-Threshold.LIGHT > deltaLight) emotions.add(Emotion.DARK); // too dark
 
-        if (Threshold.HUMIDITY < deltaHumidity) emotions.add(Emotion.HUMID); // too humid
-        else if (-Threshold.HUMIDITY > deltaHumidity) emotions.add(Emotion.THIRSTY); // too dry
+        if (tankEmpty) emotions.add(Emotion.TANK_EMPTY);
 
         if (Threshold.TEMPERATURE < deltaTemp) emotions.add(Emotion.HOT); // too hot
         else if (-Threshold.TEMPERATURE > deltaTemp) emotions.add(Emotion.COLD); // too cold
@@ -60,8 +59,8 @@ public class Reading {
         return lightValue;
     }
 
-    public double getHumidityValue() {
-        return humidityValue;
+    public boolean isTankEmpty() {
+        return tankEmpty;
     }
 
     public double getTempValue() {

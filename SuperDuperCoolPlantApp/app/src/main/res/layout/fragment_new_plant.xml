@@ -158,7 +158,7 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/new_plant_humidity"
+                    android:id="@+id/new_plant_water"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -166,7 +166,7 @@
                     android:background="@drawable/background_text"
                     android:ems="10"
                     android:enabled="false"
-                    android:hint="@string/humidity"
+                    android:hint="@string/water_every"
                     android:importantForAutofill="no"
                     android:inputType="number|numberDecimal"
                     android:paddingStart="20dp"
@@ -181,7 +181,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_weight="5"
                     android:gravity="center_vertical|end"
-                    android:text="@string/humidity_unit"
+                    android:text="@string/water_unit"
                     android:textSize="20sp" />
             </LinearLayout>
 

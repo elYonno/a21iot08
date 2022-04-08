@@ -54,17 +54,16 @@ public enum Readings {
                 else {
                     String timestamp = object.getString("timestamp");
                     double lightValue = object.getDouble("lightValue");
-                    double humidityValue = object.getDouble("humidityValue");
+                    boolean waterTankEmpty = object.getInt("waterTankEmpty") == 1;
                     double tempValue = object.getDouble("tempValue");
 
                     Reading newReading = new Reading(plant.getPlantID(), plant.getPlantName(),
-                            timestamp, lightValue, humidityValue, tempValue);
+                            timestamp, lightValue, waterTankEmpty, tempValue);
 
                     double deltaLight = object.getDouble("deltaLight");
-                    double deltaHumidity = object.getDouble("deltaHumidity");
                     double deltaTemp = object.getDouble("deltaTemp");
 
-                    newReading.setEmotions(deltaLight, deltaHumidity, deltaTemp);
+                    newReading.setEmotions(deltaLight, waterTankEmpty, deltaTemp);
                     plant.addReading(newReading);
                 }
 

@@ -27,10 +27,8 @@ public class LanguageModel {
             for (Emotion emotion : emotions) {
                 if (count != 0) comments.append("\n");
 
-                if (emotion == Emotion.THIRSTY)
-                    comments.append(plantName).append(" is thirsty.");
-                else if (emotion == Emotion.HUMID)
-                    comments.append(plantName).append(" has too much water.");
+                if (emotion == Emotion.TANK_EMPTY)
+                    comments.append(plantName).append("'s tank is empty.");
                 else if (emotion == Emotion.COLD)
                     comments.append(plantName).append(" is cold.");
                 else if (emotion == Emotion.HOT)
@@ -54,10 +52,8 @@ public class LanguageModel {
             for (Emotion emotion : emotions) {
                 if (count != 0) comments.append("\n");
 
-                if (emotion == Emotion.THIRSTY)
-                    comments.append("We added some water.");
-                else if (emotion == Emotion.HUMID)
-                    comments.append("We will slow down with the water.");
+                if (emotion == Emotion.TANK_EMPTY)
+                    comments.append("Please fill up the tank.");
                 else if (emotion == Emotion.COLD)
                     comments.append("Please move the plant to a warmer place.");
                 else if (emotion == Emotion.HOT)
@@ -75,8 +71,7 @@ public class LanguageModel {
 
     public static String plantChatEngine(Emotion emotion) {
         if (emotion == Emotion.HAPPY) return "I'm doing fine, thanks for asking! \uD83D\uDE0A";
-        else if (emotion == Emotion.THIRSTY) return "I need more water!";
-        else if (emotion == Emotion.HUMID) return "I'm getting too much water!";
+        else if (emotion == Emotion.TANK_EMPTY) return "My water tank ran out!";
         else if (emotion == Emotion.COLD) return "I'm too cold!";
         else if (emotion == Emotion.HOT) return "It's too hot over here!";
         else if (emotion == Emotion.DARK) return "I'm not getting enough light!";
@@ -88,8 +83,9 @@ public class LanguageModel {
         String userName = "<font color='#0099ff'>@" + CommonStorage.INSTANCE.getUserRealName() + "</font>";
 
         if (emotion == Emotion.HAPPY) return "That's great to hear! I'll try to maintain the current conditions!";
-        else if (emotion == Emotion.THIRSTY) return "I'll add some water!";
-        else if (emotion == Emotion.HUMID) return "I'll slow down with the water!";
+        else if (emotion == Emotion.TANK_EMPTY) return
+                MessageFormat.format("Hey, {0}! can you please fill {1}'s water tank?",
+                    userName, plantName);
         else if (emotion == Emotion.COLD) return
                 MessageFormat.format("Hey, {0}! can you please move {1} to somewhere warmer?",
                         userName, plantName);

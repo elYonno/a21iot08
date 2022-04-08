@@ -3,15 +3,15 @@ package com.example.superdupercoolplantapp.background.models;
 import androidx.annotation.NonNull;
 
 public class Parameter {
-    private final int plantType;
+    private final int plantType, nextWaterHour;
     private final String plantGenus;
-    private final double light, humidity, temp;
+    private final double light, temp;
 
-    public Parameter(int plantType, @NonNull String plantGenus, double light, double humidity, double temp) {
+    public Parameter(int plantType, @NonNull String plantGenus, double light, int nextWaterHour, double temp) {
         this.plantType = plantType;
         this.plantGenus = plantGenus;
         this.light = light;
-        this.humidity = humidity;
+        this.nextWaterHour = nextWaterHour;
         this.temp = temp;
     }
 
@@ -27,8 +27,8 @@ public class Parameter {
         return light;
     }
 
-    public double getHumidity() {
-        return humidity;
+    public int getNextWaterHour() {
+        return nextWaterHour;
     }
 
     public double getTemp() {

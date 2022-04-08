@@ -37,7 +37,7 @@ import com.example.superdupercoolplantapp.background.databasefunctions.ViewModel
 
 public class PlantDetail extends Fragment implements PlantInterface, RefreshOverride, ReadingsObserver, ScheduleObserver {
     private ImageView profilePicture;
-    private TextView type, potNumber, lastScan, emojis, nextScan, scanResults, lastAction;
+    private TextView type, potNumber, lastScan, emojis, nextScan, nextWater, scanResults, lastAction;
     private MotionLayout motionLayout;
 
     private MainActivity activity;
@@ -63,6 +63,7 @@ public class PlantDetail extends Fragment implements PlantInterface, RefreshOver
         lastScan = view.findViewById(R.id.plant_detail_last_scan);
         emojis = view.findViewById(R.id.plant_detail_emoji);
         nextScan = view.findViewById(R.id.plant_detail_next_scan);
+        nextWater = view.findViewById(R.id.plant_detail_next_water);
         scanResults = view.findViewById(R.id.plant_detail_scan_results);
         lastAction = view.findViewById(R.id.plant_detail_scan_action);
 
@@ -73,10 +74,6 @@ public class PlantDetail extends Fragment implements PlantInterface, RefreshOver
         delete.setOnClickListener(this::onDeleteClicked);
 
         ScrollView scrollView = view.findViewById(R.id.plant_detail_scroll);
-        scrollView.setOnScrollChangeListener((view1, x, y, oldX, oldY) -> {
-            if (y > oldY) motionLayout.transitionToState(R.id.transition_scroll_down);
-            else motionLayout.transitionToStart();
-        });
 
         Button edit = view.findViewById(R.id.plant_detail_edit);
         edit.setOnClickListener(this::onEditClicked);
@@ -177,7 +174,10 @@ public class PlantDetail extends Fragment implements PlantInterface, RefreshOver
         if (mostRecent != null) {
             lastScan.setText(Utilities.getHowLongAgo(mostRecent.getTimestamp()));
             emojis.setText(LanguageModel.listEmojis(mostRecent.getEmotions()));
-            scanResults.setText(LanguageModel.scanResult(plant.getPlantName(), mostRecent.getEmotions()));
+            scanResults.setText(String.format("%s\n\n%s",
+                    LanguageModel.scanResult(plant.getPlantName(), mostRecent.getEmotions()),
+                    Utilities.getFormattedReadings(plant.getMostRecentReading())
+            ));
             lastAction.setText(LanguageModel.actionResult(mostRecent.getEmotions()));
         } else {
             lastScan.setText("N/A");
@@ -190,9 +190,14 @@ public class PlantDetail extends Fragment implements PlantInterface, RefreshOver
 
     @Override
     public void updateSchedule() {
-        nextScan.setText((plant.getNextScan() != null)?
-                Utilities.getInHowLong(plant.getNextScan().getTimestamp())
-                : "N/A");
+        if (plant.getNextScan() != null) {
+            nextScan.setText((plant.getNextScan().getSchedule() != null) ?
+                    Utilities.getInHowLong(plant.getNextScan().getSchedule())
+                    : "N/A");
+            nextWater.setText((plant.getNextScan().getNextWater() != null) ?
+                    Utilities.getInHowLong(plant.getNextScan().getNextWater())
+                    : "N/A");
+        }
         activity.stopRefreshAnimation();
     }
 }
