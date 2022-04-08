@@ -1,6 +1,7 @@
 package com.example.superdupercoolplantapp.background.databasefunctions;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -13,6 +14,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.superdupercoolplantapp.MainActivity;
 import com.example.superdupercoolplantapp.background.APIs;
 import com.example.superdupercoolplantapp.background.interfaces.PlantInterface;
+import com.example.superdupercoolplantapp.background.interfaces.PlantParameterInterface;
 import com.example.superdupercoolplantapp.background.models.Plant;
 
 import org.json.JSONArray;
@@ -176,5 +178,28 @@ public class ViewModelMyPlants extends ViewModel {
                 .filter(p -> p.getPlantID() != plant.getPlantID())
                 .collect(Collectors.toCollection(ArrayList::new));
         plants.setValue(newPlants);
+    }
+
+    public void getPlantParameterByTypeName(MainActivity mainActivity, PlantParameterInterface page, String genus) {
+        RequestQueue requestQueue = Volley.newRequestQueue(mainActivity);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, APIs.getPlantParameter(genus), null,
+                response -> {
+                    try {
+                        JSONObject object = response.getJSONObject(0);
+                        page.plantParameter(
+                                object.getDouble("optimalLight"),
+                                object.getInt("waterEveryHour"),
+                                object.getDouble("optimalTemp")
+                        );
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }, error -> {
+            Toast.makeText(mainActivity, "Failure getting optimal values.", Toast.LENGTH_SHORT).show();
+            page.plantParameter(-1,-1,-1);
+        });
+
+        requestQueue.add(request);
     }
 }

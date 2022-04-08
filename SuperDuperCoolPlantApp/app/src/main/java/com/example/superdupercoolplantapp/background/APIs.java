@@ -16,4 +16,8 @@ public class APIs {
     public final static String INSERT_PLANT_PARAMETER = "https://studev.groept.be/api/a21iot08/App_AddPlantParameter";
     public final static String INSERT_NEW_PLANT = "https://studev.groept.be/api/a21iot08/App_AddPlant/";
     public final static String EDIT_PLANT = "https://studev.groept.be/api/a21iot08/App_UpdatePlant";
+
+    public static String getPlantParameter(String plantTypeName) {
+        return "https://studev.groept.be/api/a21iot08/App_GetPlantParameterByName/" + plantTypeName;
+    }
 }

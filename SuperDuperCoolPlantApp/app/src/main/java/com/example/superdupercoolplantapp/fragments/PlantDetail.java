@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +27,7 @@ import com.example.superdupercoolplantapp.background.Utilities;
 import com.example.superdupercoolplantapp.background.databasefunctions.Readings;
 import com.example.superdupercoolplantapp.background.databasefunctions.Schedule;
 import com.example.superdupercoolplantapp.background.interfaces.PlantInterface;
+import com.example.superdupercoolplantapp.background.interfaces.PlantParameterInterface;
 import com.example.superdupercoolplantapp.background.interfaces.ReadingsObserver;
 import com.example.superdupercoolplantapp.background.interfaces.RefreshOverride;
 import com.example.superdupercoolplantapp.background.interfaces.ScheduleObserver;
@@ -35,7 +35,9 @@ import com.example.superdupercoolplantapp.background.models.Plant;
 import com.example.superdupercoolplantapp.background.models.Reading;
 import com.example.superdupercoolplantapp.background.databasefunctions.ViewModelMyPlants;
 
-public class PlantDetail extends Fragment implements PlantInterface, RefreshOverride, ReadingsObserver, ScheduleObserver {
+import java.util.Locale;
+
+public class PlantDetail extends Fragment implements PlantInterface, RefreshOverride, ReadingsObserver, ScheduleObserver, PlantParameterInterface {
     private ImageView profilePicture;
     private TextView type, potNumber, lastScan, emojis, nextScan, nextWater, scanResults, lastAction;
     private MotionLayout motionLayout;
@@ -67,13 +69,15 @@ public class PlantDetail extends Fragment implements PlantInterface, RefreshOver
         scanResults = view.findViewById(R.id.plant_detail_scan_results);
         lastAction = view.findViewById(R.id.plant_detail_scan_action);
 
+        Button parameterDetail = view.findViewById(R.id.plant_detail_parameter_detail);
+        parameterDetail.setOnClickListener(this::onClick_ParameterDetail);
+        type.setOnClickListener(this::onClick_ParameterDetail);
+
         Button expand = view.findViewById(R.id.plant_detail_expand);
         expand.setOnClickListener(this::onExpandClicked);
 
         Button delete = view.findViewById(R.id.plant_detail_delete);
         delete.setOnClickListener(this::onDeleteClicked);
-
-        ScrollView scrollView = view.findViewById(R.id.plant_detail_scroll);
 
         Button edit = view.findViewById(R.id.plant_detail_edit);
         edit.setOnClickListener(this::onEditClicked);
@@ -197,7 +201,27 @@ public class PlantDetail extends Fragment implements PlantInterface, RefreshOver
             nextWater.setText((plant.getNextScan().getNextWater() != null) ?
                     Utilities.getInHowLong(plant.getNextScan().getNextWater())
                     : "N/A");
+        } else {
+            nextScan.setText("N/A");
+            nextWater.setText("N/A");
         }
         activity.stopRefreshAnimation();
+    }
+
+    private void onClick_ParameterDetail(View view) {
+        viewModel.getPlantParameterByTypeName(activity, this, plant.getPlantType());
+    }
+
+    @Override
+    public void plantParameter(double optimalLight, int water, double optimalTemp) {
+        if (optimalLight != -1) {
+            new AlertDialog.Builder(activity)
+                    .setTitle(plant.getPlantType())
+                    .setMessage(String.format(Locale.UK,"Temperature: %.0f °C\nWatered every: %s hours\nLight: %.0f lux",
+                            optimalTemp, water, optimalLight))
+                    .setPositiveButton("Okay", (dialogInterface, i) -> dialogInterface.dismiss())
+                    .create()
+                    .show();
+        }
     }
 }
